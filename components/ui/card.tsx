@@ -1,13 +1,21 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-export function Card({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+type CardVariant = "default" | "muted";
+
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: CardVariant;
+}
+
+const cardVariants: Record<CardVariant, string> = {
+  default: "border-slate-200 bg-white",
+  muted: "border-slate-200 bg-slate-50/50"
+};
+
+export function Card({ className, variant = "default", ...props }: CardProps) {
   return (
     <div
-      className={cn("rounded-lg border border-slate-200 bg-white", className)}
+      className={cn("rounded-lg border", cardVariants[variant], className)}
       {...props}
     />
   );
