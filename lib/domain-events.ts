@@ -1,6 +1,6 @@
-type DomainEventPayload = Record<string, unknown>;
+export type DomainEventPayload = Record<string, unknown>;
 
-type DomainEvent = {
+export type DomainEvent = {
   type: "CUSTOMER_ACTIVATED" | "CUSTOMER_DEACTIVATED";
   customerId: number;
   timestamp: string;
@@ -27,5 +27,5 @@ export function emitEvent(event: DomainEvent) {
 }
 
 export function getEventLog() {
-  return eventLog;
+  return [...eventLog];
 }

@@ -1,6 +1,6 @@
 import { type CustomerStatus } from "@/lib/api";
 
-type CustomerState = {
+export type CustomerState = {
   id: number;
   status: CustomerStatus;
 };
@@ -9,6 +9,10 @@ const store = new Map<number, CustomerState>();
 
 export function getCustomer(id: number): CustomerState {
   return store.get(id) ?? { id, status: "PAUSED" };
+}
+
+export function listCustomers(): CustomerState[] {
+  return Array.from(store.values()).sort((a, b) => a.id - b.id);
 }
 
 type TransitionResult = {
