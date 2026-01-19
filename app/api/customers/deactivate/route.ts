@@ -28,12 +28,19 @@ export async function POST(req: NextRequest) {
 
   const customerId = body.customerId;
   const reason = body.reason;
-  deactivateCustomer(customerId);
-  emitEvent({
-    type: "CUSTOMER_DEACTIVATED",
-    customerId,
-    timestamp: new Date().toISOString(),
-    payload: reason ? { reason } : undefined
-  });
+  const result = deactivateCustomer(customerId);
+  if (!result.allowed) {
+    return NextResponse.json({ success: false }, { status: 400 });
+  }
+
+  if (result.changed) {
+    emitEvent({
+      type: "CUSTOMER_DEACTIVATED",
+      customerId,
+      timestamp: new Date().toISOString(),
+      payload: reason ? { reason } : undefined
+    });
+  }
+
   return NextResponse.json({ success: true });
 }

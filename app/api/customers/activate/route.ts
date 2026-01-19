@@ -22,11 +22,18 @@ export async function POST(req: NextRequest) {
   }
 
   const customerId = body.customerId;
-  activateCustomer(customerId);
-  emitEvent({
-    type: "CUSTOMER_ACTIVATED",
-    customerId,
-    timestamp: new Date().toISOString()
-  });
+  const result = activateCustomer(customerId);
+  if (!result.allowed) {
+    return NextResponse.json({ success: false }, { status: 400 });
+  }
+
+  if (result.changed) {
+    emitEvent({
+      type: "CUSTOMER_ACTIVATED",
+      customerId,
+      timestamp: new Date().toISOString()
+    });
+  }
+
   return NextResponse.json({ success: true });
 }
