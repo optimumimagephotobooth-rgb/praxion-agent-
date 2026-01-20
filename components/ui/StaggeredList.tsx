@@ -3,7 +3,11 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-type StaggeredItem = { id?: string | number; content?: React.ReactNode };
+type StaggeredItem = {
+  id?: string | number;
+  content?: React.ReactNode;
+  [key: string]: unknown;
+};
 
 export function StaggeredList<T extends StaggeredItem>({
   items,

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import twilio from "twilio";
-import { isOptedOut } from "../../../../lib/sms-optout-store";
-import { getCustomer } from "../../../../lib/mock-customer-store";
+import twilio, { type Twilio } from "twilio";
+import { isOptedOut } from "@/lib/sms-optout-store";
+import { getCustomer } from "@/lib/mock-customer-store";
 
-const client = twilio(
+const client: Twilio = twilio(
   process.env.TWILIO_ACCOUNT_SID ?? "",
   process.env.TWILIO_AUTH_TOKEN ?? ""
 );

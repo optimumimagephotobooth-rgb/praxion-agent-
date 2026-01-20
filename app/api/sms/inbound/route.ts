@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { optOut } from "../../../../lib/sms-optout-store";
+import { optOut } from "@/lib/sms-optout-store";
 
 const STOP_KEYWORDS = new Set([
   "STOP",
