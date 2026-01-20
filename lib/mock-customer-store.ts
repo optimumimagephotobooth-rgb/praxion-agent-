@@ -3,12 +3,14 @@ import { type CustomerStatus } from "@/lib/api";
 export type CustomerState = {
   id: number;
   status: CustomerStatus;
+  smsAllowed: boolean;
+  bookingUrl?: string;
 };
 
 const store = new Map<number, CustomerState>();
 
 export function getCustomer(id: number): CustomerState {
-  return store.get(id) ?? { id, status: "PAUSED" };
+  return store.get(id) ?? { id, status: "PAUSED", smsAllowed: true };
 }
 
 export function listCustomers(): CustomerState[] {
@@ -38,7 +40,7 @@ function transitionCustomer(id: number, nextStatus: CustomerStatus): TransitionR
     return { allowed: false, changed: false, status: current.status };
   }
 
-  const next = { id, status: nextStatus };
+  const next = { ...current, status: nextStatus };
   store.set(id, next);
   return { allowed: true, changed: true, status: next.status };
 }

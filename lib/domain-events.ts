@@ -1,8 +1,14 @@
 export type DomainEventPayload = Record<string, unknown>;
 
+export type DomainEventType =
+  | "CUSTOMER_ACTIVATED"
+  | "CUSTOMER_DEACTIVATED"
+  | "PAYMENT_FAILED"
+  | "PAYMENT_SUCCEEDED";
+
 export type DomainEvent = {
-  type: "CUSTOMER_ACTIVATED" | "CUSTOMER_DEACTIVATED";
-  customerId: number;
+  type: DomainEventType;
+  customerId: number | string;
   timestamp: string;
   payload?: DomainEventPayload;
 };

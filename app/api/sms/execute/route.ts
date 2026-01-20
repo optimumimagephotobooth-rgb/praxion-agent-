@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Twilio from "twilio";
+import { isOptedOut } from "@/lib/sms-optout-store";
+import { getCustomer } from "@/lib/mock-customer-store";
 
 const twilio = new Twilio(
   process.env.TWILIO_ACCOUNT_SID ?? "",
@@ -20,6 +22,26 @@ export async function POST(req: NextRequest) {
   if (!smsEnabled) {
     console.log("SMS DRY-RUN:", body);
     return NextResponse.json({ sent: false, dryRun: true });
+  }
+
+  const customerId = Number(body.customerId);
+  if (Number.isNaN(customerId)) {
+    return NextResponse.json({ sent: false, reason: "INVALID_CUSTOMER" }, { status: 400 });
+  }
+
+  const customer = getCustomer(customerId);
+  if (customer.status !== "ACTIVE") {
+    console.log("SMS BLOCKED (CUSTOMER INACTIVE):", customerId);
+    return NextResponse.json({ sent: false, reason: "CUSTOMER_INACTIVE" });
+  }
+  if (customer.smsAllowed === false) {
+    console.log("SMS BLOCKED (CUSTOMER DISABLED):", customerId);
+    return NextResponse.json({ sent: false, reason: "CUSTOMER_DISABLED" });
+  }
+
+  if (isOptedOut(body.to)) {
+    console.log("SMS BLOCKED (OPT-OUT):", body.to);
+    return NextResponse.json({ sent: false, reason: "OPTED_OUT" });
   }
 
   const message = renderTemplate(body.template, body.context);
@@ -53,6 +75,8 @@ function renderTemplate(
   switch (template) {
     case "MISSED_CALL_FOLLOWUP":
       return `Hi, this is ${context.businessName ?? "our team"}. Sorry we missed your call — reply YES to book or STOP to opt out.`;
+    case "BOOKING_LINK":
+      return `Great! You can book here: ${context.bookingUrl ?? ""}`;
     default:
       return "Hello from Praxion.";
   }
