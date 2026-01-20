@@ -99,13 +99,13 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
               <Plus className="mr-2 h-4 w-4" />
               Manage Customers
             </Button>
-            <Button variant="ghost" className="hover:scale-[1.02]">
+            <Button variant="outline" className="hover:scale-[1.02]">
               View Analytics
             </Button>
-            <Button variant="ghost" className="hover:scale-[1.02]">
+            <Button variant="outline" className="hover:scale-[1.02]">
               Billing
             </Button>
-            <Button variant="ghost" className="hover:scale-[1.02]">
+            <Button variant="outline" className="hover:scale-[1.02]">
               Reports
             </Button>
           </div>
