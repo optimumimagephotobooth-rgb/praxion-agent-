@@ -43,3 +43,12 @@ export function CardTitle({
     <h3 className={cn("text-lg font-semibold text-slate-900", className)} {...props} />
   );
 }
+
+export function CardDescription({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLParagraphElement>) {
+  return (
+    <p className={cn("text-sm text-slate-500", className)} {...props} />
+  );
+}

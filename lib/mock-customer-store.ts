@@ -4,13 +4,21 @@ export type CustomerState = {
   id: number;
   status: CustomerStatus;
   smsAllowed: boolean;
+  voiceEnabled: boolean;
   bookingUrl?: string;
 };
 
 const store = new Map<number, CustomerState>();
 
 export function getCustomer(id: number): CustomerState {
-  return store.get(id) ?? { id, status: "PAUSED", smsAllowed: true };
+  return (
+    store.get(id) ?? {
+      id,
+      status: "PAUSED",
+      smsAllowed: true,
+      voiceEnabled: false
+    }
+  );
 }
 
 export function listCustomers(): CustomerState[] {
