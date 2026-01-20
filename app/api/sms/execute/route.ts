@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import Twilio from "twilio";
+import twilio from "twilio";
 import { isOptedOut } from "../../../../lib/sms-optout-store";
 import { getCustomer } from "../../../../lib/mock-customer-store";
 
-const twilio = new Twilio(
+const client = twilio(
   process.env.TWILIO_ACCOUNT_SID ?? "",
   process.env.TWILIO_AUTH_TOKEN ?? ""
 );
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
   const message = renderTemplate(body.template, body.context);
 
   try {
-    const result = await twilio.messages.create({
+    const result = await client.messages.create({
       to: body.to,
       from: process.env.TWILIO_FROM_NUMBER ?? "",
       body: message
