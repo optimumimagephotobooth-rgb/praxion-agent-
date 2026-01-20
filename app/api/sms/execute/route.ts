@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Twilio from "twilio";
-import { isOptedOut } from "@/lib/sms-optout-store";
-import { getCustomer } from "@/lib/mock-customer-store";
+import { isOptedOut } from "../../../../lib/sms-optout-store";
+import { getCustomer } from "../../../../lib/mock-customer-store";
 
 const twilio = new Twilio(
   process.env.TWILIO_ACCOUNT_SID ?? "",
