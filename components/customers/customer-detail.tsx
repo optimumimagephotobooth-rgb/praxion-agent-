@@ -70,8 +70,8 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
 
   if (error || !customer) {
     return (
-      <div className="flex h-64 flex-col items-center justify-center gap-4 text-gray-500">
-        <AlertTriangle className="h-12 w-12 text-red-400" />
+      <div className="flex h-64 flex-col items-center justify-center gap-4 text-slate-400">
+        <AlertTriangle className="h-12 w-12 text-rose-400" />
         <p className="text-lg font-medium">{error || "Customer not found."}</p>
         <Button variant="outline" onClick={() => onNavigate("list")}>
           Go back to List
@@ -149,7 +149,7 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
             <ChevronLeft className="mr-1 h-4 w-4" />
             Back
           </Button>
-          <h1 className="text-2xl font-semibold text-gray-900">
+          <h1 className="text-2xl font-semibold text-slate-100">
             Customer Details
           </h1>
         </div>
@@ -166,18 +166,18 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
         </Badge>
       </div>
 
-      <Card>
+      <Card className="glass-card">
         <CardContent className="space-y-3 p-6">
           <div
             className={`rounded-md border px-3 py-2 text-sm font-medium ${
               isReadyForActivation
-                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                : "border-amber-200 bg-amber-50 text-amber-700"
+                ? "border-emerald-400/40 bg-emerald-500/15 text-emerald-300"
+                : "border-amber-400/40 bg-amber-500/15 text-amber-300"
             }`}
           >
             {isReadyForActivation ? "READY" : "NOT READY"}
           </div>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-slate-400">
             {isReadyForActivation
               ? "Customer is ready for activation."
               : "Missing required setup to activate this customer."}
@@ -185,13 +185,13 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="glass-card">
         <CardContent className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
             <Badge variant={isReadyForActivation ? "success" : "warning"}>
               {isReadyForActivation ? "READY" : "NOT READY"}
             </Badge>
-            <span className="text-sm text-gray-700">
+            <span className="text-sm text-slate-200">
               {isReadyForActivation
                 ? "Customer is ready for activation"
                 : "Complete required setup before activation"}
@@ -202,10 +202,10 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-slate-100">
             Business Information
           </h3>
-          <Card className="h-full">
+          <Card className="glass-card h-full">
             <CardContent className="space-y-6 p-6">
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <InfoRow label="Business Name" value={customer.name} />
@@ -221,10 +221,10 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-slate-100">
             Activation Readiness
           </h3>
-          <Card className="h-full">
+          <Card className="glass-card h-full">
             <CardContent className="space-y-3 p-6">
               <div className="space-y-2">
                 <ChecklistItem
@@ -239,9 +239,9 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
         </div>
       </div>
 
-      <Card>
+      <Card className="glass-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+          <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-400">
             Actions
           </CardTitle>
         </CardHeader>
@@ -275,9 +275,9 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
 
 function ChecklistItem({ label, ok }: { label: string; ok: boolean }) {
   return (
-    <div className="flex items-center justify-between rounded-md border border-slate-200 px-3 py-2 text-sm">
-      <span className="text-gray-700">{label}</span>
-      <span className={ok ? "text-emerald-600" : "text-gray-400"}>
+    <div className="flex items-center justify-between rounded-md border border-slate-700/60 bg-slate-900/60 px-3 py-2 text-sm">
+      <span className="text-slate-200">{label}</span>
+      <span className={ok ? "text-emerald-400" : "text-slate-400"}>
         {ok ? "Ready" : "Missing"}
       </span>
     </div>
@@ -287,8 +287,8 @@ function ChecklistItem({ label, ok }: { label: string; ok: boolean }) {
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="mb-1 text-sm text-gray-500">{label}</div>
-      <div className="break-words text-base font-medium text-gray-900">
+      <div className="mb-1 text-sm text-slate-400">{label}</div>
+      <div className="break-words text-base font-medium text-slate-100">
         {value}
       </div>
     </div>

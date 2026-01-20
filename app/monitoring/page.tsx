@@ -33,8 +33,8 @@ export default function MonitoringPage() {
     <main className="mx-auto flex w-full max-w-[1392px] flex-col gap-6 px-6 py-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Monitoring</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-semibold text-slate-100">Monitoring</h1>
+          <p className="text-sm text-slate-400">
             System activity, customer state, and event flow visibility.
           </p>
         </div>
@@ -48,13 +48,13 @@ export default function MonitoringPage() {
         <MetricCard label="Terminated" value={totals.terminated} variant="destructive" />
       </div>
 
-      <Card>
+      <Card className="glass-card">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle className="text-base font-semibold text-gray-900">
+            <CardTitle className="text-base font-semibold text-slate-100">
               Recent Domain Events
             </CardTitle>
-            <p className="text-sm text-gray-500">Latest 50 events (newest first).</p>
+            <p className="text-sm text-slate-400">Latest 50 events (newest first).</p>
           </div>
           <Badge variant={events.length > 0 ? "success" : "default"}>
             {events.length} events
@@ -73,23 +73,23 @@ export default function MonitoringPage() {
             <TableBody>
               {events.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center text-gray-500">
+                  <TableCell colSpan={4} className="text-center text-slate-400">
                     No events yet
                   </TableCell>
                 </TableRow>
               ) : (
                 events.map((event) => (
                   <TableRow key={`${event.customerId}-${event.timestamp}-${event.type}`}>
-                    <TableCell className="whitespace-nowrap text-xs text-gray-500">
+                    <TableCell className="whitespace-nowrap text-xs text-slate-400">
                       {event.timestamp}
                     </TableCell>
-                    <TableCell className="text-xs font-medium text-gray-900">
+                    <TableCell className="text-xs font-medium text-slate-100">
                       {event.type}
                     </TableCell>
-                    <TableCell className="text-xs text-gray-600">
+                    <TableCell className="text-xs text-slate-300">
                       #{event.customerId}
                     </TableCell>
-                    <TableCell className="text-xs text-gray-500">
+                    <TableCell className="text-xs text-slate-400">
                       {formatPayload(event.payload)}
                     </TableCell>
                   </TableRow>
@@ -100,9 +100,9 @@ export default function MonitoringPage() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="glass-card">
         <CardHeader>
-          <CardTitle className="text-base font-semibold text-gray-900">
+          <CardTitle className="text-base font-semibold text-slate-100">
             Customer State Snapshot
           </CardTitle>
         </CardHeader>
@@ -117,14 +117,14 @@ export default function MonitoringPage() {
             <TableBody>
               {customers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={2} className="text-center text-gray-500">
+                  <TableCell colSpan={2} className="text-center text-slate-400">
                     No customers tracked yet
                   </TableCell>
                 </TableRow>
               ) : (
                 customers.map((customer) => (
                   <TableRow key={customer.id}>
-                    <TableCell className="text-sm text-gray-700">
+                    <TableCell className="text-sm text-slate-200">
                       #{customer.id}
                     </TableCell>
                     <TableCell>
@@ -161,13 +161,13 @@ function MetricCard({
   variant?: "default" | "success" | "destructive";
 }) {
   return (
-    <Card>
+    <Card className="glass-card">
       <CardContent className="flex items-center justify-between p-4">
         <div>
-          <div className="text-xs uppercase tracking-wide text-gray-400">
+          <div className="text-xs uppercase tracking-wide text-slate-400">
             {label}
           </div>
-          <div className="text-2xl font-semibold text-gray-900">{value}</div>
+          <div className="text-2xl font-semibold text-slate-100">{value}</div>
         </div>
         <Badge variant={variant}>{value}</Badge>
       </CardContent>

@@ -210,10 +210,10 @@ export function OnboardingDashboard() {
 
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">
+          <h1 className="text-2xl font-semibold text-slate-100">
             Customer Onboarding
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-slate-400">
             Add customers, validate readiness, and activate safely.
           </p>
         </div>
@@ -223,15 +223,15 @@ export function OnboardingDashboard() {
       </div>
 
       {showForm && (
-        <Card>
+        <Card className="glass-card">
           <CardHeader>
-            <CardTitle className="text-base font-semibold text-gray-900">
+            <CardTitle className="text-base font-semibold text-slate-100">
               Add Customer
             </CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">
+              <label className="text-sm font-medium text-slate-300">
                 Business name
               </label>
               <Input
@@ -243,7 +243,7 @@ export function OnboardingDashboard() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">
+              <label className="text-sm font-medium text-slate-300">
                 Contact email
               </label>
               <Input
@@ -255,7 +255,7 @@ export function OnboardingDashboard() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">
+              <label className="text-sm font-medium text-slate-300">
                 Business phone
               </label>
               <Input
@@ -267,7 +267,7 @@ export function OnboardingDashboard() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">Plan</label>
+              <label className="text-sm font-medium text-slate-300">Plan</label>
               <Select
                 value={formState.plan}
                 onChange={(event) =>
@@ -283,7 +283,7 @@ export function OnboardingDashboard() {
               </Select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">
+              <label className="text-sm font-medium text-slate-300">
                 Stripe customer ID
               </label>
               <Input
@@ -298,7 +298,7 @@ export function OnboardingDashboard() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">
+              <label className="text-sm font-medium text-slate-300">
                 Payment status
               </label>
               <Select
@@ -315,7 +315,7 @@ export function OnboardingDashboard() {
               </Select>
             </div>
             <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-medium text-gray-600">Notes</label>
+              <label className="text-sm font-medium text-slate-300">Notes</label>
               <Textarea
                 placeholder="Optional notes for operators"
                 value={formState.notes}
@@ -325,7 +325,7 @@ export function OnboardingDashboard() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">Industry</label>
+              <label className="text-sm font-medium text-slate-300">Industry</label>
               <Input
                 placeholder="Trades, Clinics, Agencies"
                 value={formState.industry}
@@ -338,7 +338,7 @@ export function OnboardingDashboard() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">Address</label>
+              <label className="text-sm font-medium text-slate-300">Address</label>
               <Input
                 placeholder="Street, City"
                 value={formState.address}
@@ -351,7 +351,7 @@ export function OnboardingDashboard() {
               />
             </div>
             {formError && (
-              <div className="md:col-span-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              <div className="md:col-span-2 rounded-md border border-rose-500/30 bg-rose-500/15 px-3 py-2 text-sm text-rose-300">
                 {formError}
               </div>
             )}
@@ -366,32 +366,32 @@ export function OnboardingDashboard() {
       )}
 
       <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
-        <Card className="h-fit">
+        <Card className="glass-card h-fit">
           <CardHeader>
-            <CardTitle className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+            <CardTitle className="text-sm font-semibold uppercase tracking-wide text-slate-400">
               Customers
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {customers.length === 0 && (
-              <div className="text-sm text-gray-500">No customers yet.</div>
+              <div className="text-sm text-slate-400">No customers yet.</div>
             )}
             {customers.map((customer) => (
               <button
                 key={customer.id}
                 className={`flex w-full items-center justify-between rounded-md border px-3 py-3 text-left transition ${
                   customer.id === selectedId
-                    ? "border-blue-200 bg-blue-50"
-                    : "border-slate-200 hover:bg-slate-50"
+                    ? "border-primary/40 bg-primary/10"
+                    : "border-slate-700/60 bg-slate-900/40 hover:bg-slate-800/60"
                 }`}
                 onClick={() => setSelectedId(customer.id)}
                 type="button"
               >
                 <div>
-                  <div className="text-sm font-semibold text-gray-900">
+                  <div className="text-sm font-semibold text-slate-100">
                     {customer.name}
                   </div>
-                  <div className="text-xs text-gray-500">{customer.email}</div>
+                  <div className="text-xs text-slate-400">{customer.email}</div>
                 </div>
                 <Badge
                   variant={
@@ -409,10 +409,10 @@ export function OnboardingDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="glass-card">
           <CardHeader className="space-y-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg font-semibold text-gray-900">
+              <CardTitle className="text-lg font-semibold text-slate-100">
                 Customer Detail
               </CardTitle>
               {selectedCustomer && (
@@ -433,8 +433,8 @@ export function OnboardingDashboard() {
               <div
                 className={`rounded-md border px-3 py-2 text-sm ${
                   readiness.ready
-                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                    : "border-amber-200 bg-amber-50 text-amber-700"
+                    ? "border-emerald-400/40 bg-emerald-500/15 text-emerald-300"
+                    : "border-amber-400/40 bg-amber-500/15 text-amber-300"
                 }`}
               >
                 {readiness.ready
@@ -445,7 +445,7 @@ export function OnboardingDashboard() {
           </CardHeader>
           <CardContent className="space-y-6">
             {!selectedCustomer && (
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-slate-400">
                 Select a customer to view details.
               </div>
             )}
@@ -469,15 +469,15 @@ export function OnboardingDashboard() {
                 </div>
 
                 {selectedCustomer.notes && (
-                  <div className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+                  <div className="rounded-md border border-slate-700/60 bg-slate-900/60 px-4 py-3 text-sm text-slate-300">
                     {selectedCustomer.notes}
                   </div>
                 )}
 
                 {readiness && (
-                  <Card className="border-slate-200">
+                  <Card className="glass-card">
                     <CardHeader>
-                      <CardTitle className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+                      <CardTitle className="text-sm font-semibold uppercase tracking-wide text-slate-400">
                         Activation Readiness
                       </CardTitle>
                     </CardHeader>
@@ -485,12 +485,12 @@ export function OnboardingDashboard() {
                       {readiness.checklist.map((item) => (
                         <div
                           key={item.label}
-                          className="flex items-center justify-between rounded-md border border-slate-200 px-3 py-2 text-sm"
+                          className="flex items-center justify-between rounded-md border border-slate-700/60 bg-slate-900/60 px-3 py-2 text-sm"
                         >
-                          <span className="text-gray-700">{item.label}</span>
+                          <span className="text-slate-200">{item.label}</span>
                           <span
                             className={
-                              item.ok ? "text-emerald-600" : "text-gray-400"
+                              item.ok ? "text-emerald-400" : "text-slate-400"
                             }
                           >
                             {item.ok ? "Ready" : "Missing"}
@@ -534,8 +534,8 @@ export function OnboardingDashboard() {
 function InfoItem({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="text-xs uppercase tracking-wide text-gray-400">{label}</div>
-      <div className="text-sm font-medium text-gray-900">{value}</div>
+      <div className="text-xs uppercase tracking-wide text-slate-400">{label}</div>
+      <div className="text-sm font-medium text-slate-100">{value}</div>
     </div>
   );
 }

@@ -29,32 +29,32 @@ export function ReadinessChecklist({
   const total = items.length;
 
   return (
-    <Card className="w-full">
+    <Card className="glass-card w-full">
       <CardHeader className="space-y-2">
-        <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-        <p className="text-figma-body text-slate-500">{description}</p>
+        <h2 className="text-lg font-semibold text-slate-100">{title}</h2>
+        <p className="text-figma-body text-slate-400">{description}</p>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex items-center justify-between text-sm text-slate-600">
+        <div className="flex items-center justify-between text-sm text-slate-400">
           <span>
             {completed} of {total} completed
           </span>
-          <span className="font-medium text-[#10B981]">Ready</span>
+          <span className="font-medium text-emerald-400">Ready</span>
         </div>
         <div className="space-y-3">
           {items.map((item) => (
             <div
               key={item.id}
               className={cn(
-                "flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3",
-                item.complete ? "bg-[#10B981]/5" : "bg-white"
+                "flex items-center justify-between rounded-lg border border-slate-700/60 px-4 py-3",
+                item.complete ? "bg-emerald-500/10" : "bg-slate-900/60"
               )}
             >
-              <span className="text-sm text-slate-700">{item.label}</span>
+              <span className="text-sm text-slate-200">{item.label}</span>
               <span
                 className={cn(
                   "text-xs font-medium",
-                  item.complete ? "text-[#10B981]" : "text-slate-400"
+                  item.complete ? "text-emerald-400" : "text-slate-400"
                 )}
               >
                 {item.complete ? "Done" : "Pending"}
@@ -72,7 +72,7 @@ export function ReadinessChecklist({
 
 export function ReadinessChecklistSkeleton() {
   return (
-    <Card className="w-full">
+    <Card className="glass-card w-full">
       <CardHeader className="space-y-2">
         <Skeleton className="h-5 w-40" />
         <Skeleton className="h-4 w-64" />

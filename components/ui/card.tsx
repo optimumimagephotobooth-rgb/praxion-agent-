@@ -9,8 +9,8 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const cardVariants: Record<CardVariant, string> = {
-  default: "border-slate-200 bg-white",
-  muted: "border-slate-200 bg-slate-50/50"
+  default: "border-slate-700/60 bg-slate-900/70 backdrop-blur-sm",
+  muted: "border-slate-700/50 bg-slate-800/40 backdrop-blur-sm"
 };
 
 export function Card({
@@ -51,7 +51,7 @@ export function CardTitle({
   ...props
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h3 className={cn("text-lg font-semibold text-slate-900", className)} {...props} />
+    <h3 className={cn("text-lg font-semibold text-slate-100", className)} {...props} />
   );
 }
 
@@ -60,6 +60,6 @@ export function CardDescription({
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p className={cn("text-sm text-slate-500", className)} {...props} />
+    <p className={cn("text-sm text-slate-400", className)} {...props} />
   );
 }

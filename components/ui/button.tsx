@@ -12,7 +12,7 @@ const baseStyles =
 const variants = {
   default: "bg-primary text-white hover:bg-primary-hover hover:shadow-lg",
   outline:
-    "border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 border-transition"
+    "border border-slate-600/70 bg-slate-900/40 text-slate-100 hover:border-secondary hover:bg-slate-900/70 border-transition"
 };
 
 const sizes = {

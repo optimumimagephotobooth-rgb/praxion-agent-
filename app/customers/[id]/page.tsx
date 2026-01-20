@@ -13,7 +13,7 @@ export default async function CustomerDetailPage({
   if (Number.isNaN(customerId)) {
     return (
       <main className="mx-auto w-full max-w-[1392px] px-6 py-8">
-        <div className="text-sm text-gray-500">Invalid customer ID.</div>
+        <div className="text-sm text-slate-400">Invalid customer ID.</div>
       </main>
     );
   }

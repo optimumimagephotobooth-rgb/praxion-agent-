@@ -21,16 +21,45 @@ const config: Config = {
         slideIn: {
           "0%": { opacity: "0", transform: "translateX(-10px)" },
           "100%": { opacity: "1", transform: "translateX(0)" }
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" }
+        },
+        "glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(139, 92, 246, 0.15)" },
+          "50%": { boxShadow: "0 0 30px rgba(139, 92, 246, 0.25)" }
+        },
+        scanline: {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(1000%)" }
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-1000px 0" },
+          "100%": { backgroundPosition: "1000px 0" }
         }
       },
       animation: {
         "fade-in": "fadeIn 0.4s ease-out",
         "slide-in": "slideIn 0.3s ease-out",
-        "pulse-slow": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite"
+        "pulse-slow": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        float: "float 6s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
+        shimmer: "shimmer 2s infinite linear",
+        scanline: "scanline 2s linear infinite"
       },
       transitionProperty: {
         height: "height",
         spacing: "margin, padding"
+      },
+      backdropBlur: {
+        xs: "2px"
+      },
+      backgroundImage: {
+        "gradient-futuristic": "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)",
+        "gradient-glow":
+          "radial-gradient(circle at center, rgba(139, 92, 246, 0.15), transparent 70%)",
+        "cyber-gradient": "linear-gradient(45deg, #8B5CF6, #06B6D4)"
       },
       colors: {
         border: "hsl(var(--border))",
@@ -64,8 +93,20 @@ const config: Config = {
           500: "var(--gray-500)",
           900: "var(--gray-900)"
         },
+        futuristic: {
+          primary: "#8B5CF6",
+          "primary-dark": "#7C3AED",
+          "primary-light": "#A78BFA",
+          secondary: "#06B6D4",
+          "secondary-dark": "#0891B2",
+          accent: "#10B981",
+          "accent-dark": "#059669",
+          surface: "#0F172A",
+          "surface-light": "#1E293B",
+          "surface-lighter": "#334155"
+        },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "var(--secondary)",
           foreground: "hsl(var(--secondary-foreground))"
         },
         muted: {

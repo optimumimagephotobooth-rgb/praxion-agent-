@@ -56,8 +56,8 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
 
   if (error || !customer) {
     return (
-      <div className="flex h-64 flex-col items-center justify-center gap-4 text-gray-500">
-        <AlertTriangle className="h-12 w-12 text-red-400" />
+      <div className="flex h-64 flex-col items-center justify-center gap-4 text-slate-400">
+        <AlertTriangle className="h-12 w-12 text-rose-400" />
         <p className="text-lg font-medium">{error || "Customer not found."}</p>
         <Button variant="outline" onClick={() => onNavigate("list")}>
           Go back to List
@@ -83,13 +83,13 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
             <ChevronLeft className="mr-1 h-4 w-4" />
             Back
           </Button>
-          <h1 className="text-2xl font-semibold text-gray-900">
+          <h1 className="text-2xl font-semibold text-slate-100">
             Customer Details
           </h1>
         </div>
       </div>
 
-      <Card>
+      <Card className="glass-card">
         <CardContent className="flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3">
             <Badge
@@ -103,14 +103,14 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
             >
               {customer.status}
             </Badge>
-            <span className="text-sm font-medium text-gray-600">
+            <span className="text-sm font-medium text-slate-400">
               {isReadyForActivation
                 ? "Ready for activation"
                 : "Missing required setup"}
             </span>
           </div>
 
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-slate-400">
             Last updated: {new Date().toLocaleDateString()}
           </div>
         </CardContent>
@@ -118,10 +118,10 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-slate-100">
             Business Information
           </h3>
-          <Card className="h-full">
+          <Card className="glass-card h-full">
             <CardContent className="space-y-6 p-6">
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <InfoRow label="Business Name" value={customer.name} />
@@ -134,7 +134,7 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
               </div>
 
               {customer.notes && (
-                <div className="border-t border-gray-100 pt-4">
+                <div className="border-t border-slate-700/60 pt-4">
                   <InfoRow label="Notes" value={customer.notes} />
                 </div>
               )}
@@ -143,10 +143,10 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-slate-100">
             Activation Readiness
           </h3>
-          <Card className="h-full">
+          <Card className="glass-card h-full">
             <CardContent className="space-y-4 p-6">
               <div className="space-y-3">
                 <ChecklistItem
@@ -171,13 +171,13 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
         </div>
       </div>
 
-      <Card className="border-gray-100 bg-gray-50/50">
+      <Card className="glass-card">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+          <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-400">
             System Info
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-1 font-mono text-xs text-gray-400">
+        <CardContent className="space-y-1 font-mono text-xs text-slate-400">
           <div>Customer ID: {customer.id}</div>
           <div>Created at: {customer.createdAt || new Date().toISOString()}</div>
           <div>Last event: {customer.lastEvent || "—"}</div>
@@ -190,8 +190,8 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="mb-1 text-sm text-gray-500">{label}</div>
-      <div className="break-words text-base font-medium text-gray-900">
+      <div className="mb-1 text-sm text-slate-400">{label}</div>
+      <div className="break-words text-base font-medium text-slate-100">
         {value}
       </div>
     </div>
@@ -204,8 +204,8 @@ function ChecklistItem({ label, ok }: { label: string; ok: boolean }) {
       <div
         className={`flex h-5 w-5 items-center justify-center rounded-full border ${
           ok
-            ? "border-green-500 bg-green-500 text-white"
-            : "border-gray-300 bg-white"
+            ? "border-emerald-400 bg-emerald-500/20 text-emerald-200"
+            : "border-slate-600 bg-slate-900/70 text-slate-400"
         }`}
       >
         {ok && (
@@ -226,7 +226,7 @@ function ChecklistItem({ label, ok }: { label: string; ok: boolean }) {
       </div>
       <span
         className={`text-sm font-medium ${
-          ok ? "text-gray-900" : "text-gray-500"
+          ok ? "text-slate-100" : "text-slate-400"
         }`}
       >
         {label}

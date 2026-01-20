@@ -113,25 +113,25 @@ export function AddCustomerDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 px-6">
       {toast && (
         <div className="fixed right-6 top-6 z-50">
           <Toast variant={toast.variant}>{toast.message}</Toast>
         </div>
       )}
-      <Card className="w-full max-w-2xl">
+      <Card className="glass-card w-full max-w-2xl">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-gray-900">
+          <CardTitle className="text-lg font-semibold text-slate-100">
             Add Customer
           </CardTitle>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-slate-400">
             Create a customer account and prepare it for activation.
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">
+              <label className="text-sm font-medium text-slate-300">
                 Business Name (required)
               </label>
               <Input
@@ -144,13 +144,13 @@ export function AddCustomerDialog({
                   }
                 }}
               />
-              {errors.name && <p className="text-xs text-red-600">{errors.name}</p>}
+              {errors.name && <p className="text-xs text-rose-400">{errors.name}</p>}
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">
+              <label className="text-sm font-medium text-slate-300">
                 Contact Email (required)
               </label>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-slate-400">
                 Used for system notifications and account contact
               </p>
               <Input
@@ -163,15 +163,13 @@ export function AddCustomerDialog({
                   }
                 }}
               />
-              {errors.email && (
-                <p className="text-xs text-red-600">{errors.email}</p>
-              )}
+              {errors.email && <p className="text-xs text-rose-400">{errors.email}</p>}
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">
+              <label className="text-sm font-medium text-slate-300">
                 Business Phone (required)
               </label>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-slate-400">
                 Customer’s real business phone number (calls will be linked to this)
               </p>
               <Input
@@ -184,12 +182,10 @@ export function AddCustomerDialog({
                   }
                 }}
               />
-              {errors.phone && (
-                <p className="text-xs text-red-600">{errors.phone}</p>
-              )}
+              {errors.phone && <p className="text-xs text-rose-400">{errors.phone}</p>}
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-600">
+              <label className="text-sm font-medium text-slate-300">
                 Plan (required)
               </label>
               <Select
@@ -208,15 +204,15 @@ export function AddCustomerDialog({
                 <option value="pro">Pro</option>
                 <option value="enterprise">Enterprise</option>
               </Select>
-              {errors.plan && <p className="text-xs text-red-600">{errors.plan}</p>}
+              {errors.plan && <p className="text-xs text-rose-400">{errors.plan}</p>}
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-600">
+            <label className="text-sm font-medium text-slate-300">
               Internal Notes (optional)
             </label>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-slate-400">
               Staff-only notes (not visible to the customer)
             </p>
             <Textarea
@@ -234,7 +230,7 @@ export function AddCustomerDialog({
               {submitting ? "Creating…" : "Create Customer"}
             </Button>
             {!isFormValid && (
-              <span className="text-xs text-gray-500">Complete required fields</span>
+              <span className="text-xs text-slate-400">Complete required fields</span>
             )}
           </div>
         </CardContent>

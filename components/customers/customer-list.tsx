@@ -56,8 +56,8 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
 
   if (error) {
     return (
-      <div className="flex h-64 flex-col items-center justify-center gap-4 text-gray-500">
-        <AlertTriangle className="h-10 w-10 text-red-400" />
+      <div className="flex h-64 flex-col items-center justify-center gap-4 text-slate-400">
+        <AlertTriangle className="h-10 w-10 text-rose-400" />
         <p>{error}</p>
         <Button variant="outline" onClick={fetchCustomers}>
           Retry
@@ -70,8 +70,8 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Customers</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-semibold text-slate-100">Customers</h1>
+          <p className="text-sm text-slate-400">
             Manage customer accounts and activation status
           </p>
         </div>
@@ -106,15 +106,15 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
         }}
       />
 
-      <Card>
+      <Card className="glass-card">
         <CardHeader>
-          <CardTitle className="text-sm font-medium uppercase tracking-wide text-gray-600">
+          <CardTitle className="text-sm font-medium uppercase tracking-wide text-slate-400">
             Customer List
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <table className="w-full text-sm">
-            <thead className="border-b bg-gray-50">
+            <thead className="border-b border-slate-700/60 bg-slate-900/70 text-slate-300">
               <tr>
                 <th className="px-6 py-3 text-left">Business</th>
                 <th className="px-6 py-3 text-left">Status</th>
@@ -124,7 +124,7 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
             <tbody>
               {customers.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={3} className="px-6 py-8 text-center text-slate-400">
                     No customers found
                   </td>
                 </tr>
@@ -132,10 +132,10 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
                 customers.map((customer) => (
                   <tr
                     key={customer.id}
-                    className="cursor-pointer hover:bg-gray-50"
+                    className="cursor-pointer border-b border-slate-800/60 hover:bg-slate-800/50"
                     onClick={() => onNavigate("detail", customer.id)}
                   >
-                    <td className="px-6 py-4 font-medium text-gray-900">
+                    <td className="px-6 py-4 font-medium text-slate-100">
                       {customer.name}
                     </td>
                     <td className="px-6 py-4">
@@ -151,7 +151,7 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
                         {customer.status === "PAUSED" ? "INACTIVE" : customer.status}
                       </Badge>
                     </td>
-                    <td className="px-6 py-4 text-gray-600">
+                    <td className="px-6 py-4 text-slate-300">
                       {customer.plan || "—"}
                     </td>
                   </tr>
@@ -160,7 +160,7 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
             </tbody>
           </table>
 
-          <div className="flex items-center justify-between border-t px-6 py-4">
+          <div className="flex items-center justify-between border-t border-slate-700/60 px-6 py-4">
             <Button
               variant="outline"
               size="sm"
@@ -171,7 +171,7 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
               Previous
             </Button>
 
-            <span className="text-sm text-gray-500">Page {page}</span>
+            <span className="text-sm text-slate-400">Page {page}</span>
 
             <Button
               variant="outline"

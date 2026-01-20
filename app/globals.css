@@ -4,18 +4,37 @@
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 222.2 47.4% 11.2%;
-    --primary: #3B82F6;
-    --primary-hover: #2563EB;
+    --background: 222 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --primary: #8B5CF6;
+    --primary-dark: #7C3AED;
+    --primary-light: #A78BFA;
+    --primary-glow: rgba(139, 92, 246, 0.15);
+    --primary-hover: #7C3AED;
     --primary-foreground: 210 40% 98%;
+    --secondary: #06B6D4;
+    --secondary-dark: #0891B2;
+    --secondary-light: #22D3EE;
+    --secondary-glow: rgba(6, 182, 212, 0.15);
+    --accent: #10B981;
+    --accent-dark: #059669;
+    --accent-light: #34D399;
+    --accent-glow: rgba(16, 185, 129, 0.15);
+    --warning: #F59E0B;
+    --error: #EF4444;
+    --info: #8B5CF6;
+    --surface: #0F172A;
+    --surface-light: #1E293B;
+    --surface-lighter: #334155;
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --text-tertiary: #64748B;
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
     --success: #10B981;
     --success-light: rgba(16, 185, 129, 0.1);
     --emerald: #10B981;
     --emerald-light: rgba(16, 185, 129, 0.1);
-    --warning: #F59E0B;
-    --error: #EF4444;
-    --info: #8B5CF6;
     --slate-50: #f8fafc;
     --slate-100: #f1f5f9;
     --slate-200: #e2e8f0;
@@ -24,16 +43,14 @@
     --gray-400: #9ca3af;
     --gray-500: #6b7280;
     --gray-900: #111827;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --ring: 217.2 91.2% 59.8%;
+    --border: 217.2 32.6% 17.5%;
+    --ring: 262 83% 58%;
     --radius: 0.75rem;
   }
 
@@ -56,6 +73,9 @@
 
   body {
     @apply bg-background text-foreground;
+    background-color: var(--surface);
+    background-image: linear-gradient(135deg, var(--surface), var(--surface-light));
+    background-attachment: fixed;
   }
 }
 
@@ -71,6 +91,94 @@
   .border-transition {
     @apply transition-colors duration-300;
   }
+}
+
+.futuristic-gradient {
+  background: linear-gradient(135deg, var(--surface), var(--surface-light));
+}
+
+.primary-glow {
+  background: radial-gradient(circle at center, var(--primary-glow), transparent 70%);
+}
+
+.neon-glow {
+  box-shadow: 0 0 20px var(--primary-glow), 0 0 40px var(--primary-glow);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+}
+
+.cyber-border {
+  position: relative;
+  border: 1px solid transparent;
+  background: linear-gradient(var(--surface-light), var(--surface-light)) padding-box,
+    linear-gradient(45deg, var(--primary), var(--secondary)) border-box;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 20px var(--primary-glow);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--primary-glow);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(1000%);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.animate-scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-scanline::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+  animation: scanline 2s linear infinite;
 }
 
 @keyframes fadeIn {
