@@ -33,24 +33,28 @@ export async function POST(req: NextRequest) {
   switch (event.type) {
     case "invoice.payment_failed": {
       const invoice = event.data.object as Stripe.Invoice;
+      const customerId =
+        typeof invoice.customer === "string" ? invoice.customer : "unknown";
       emitEvent({
         type: "PAYMENT_FAILED",
-        customerId: invoice.customer ?? "unknown",
+        customerId,
         timestamp: new Date().toISOString(),
         payload: {
-          customerId: invoice.customer ?? "unknown"
+          customerId
         }
       });
       break;
     }
     case "invoice.payment_succeeded": {
       const invoice = event.data.object as Stripe.Invoice;
+      const customerId =
+        typeof invoice.customer === "string" ? invoice.customer : "unknown";
       emitEvent({
         type: "PAYMENT_SUCCEEDED",
-        customerId: invoice.customer ?? "unknown",
+        customerId,
         timestamp: new Date().toISOString(),
         payload: {
-          customerId: invoice.customer ?? "unknown"
+          customerId
         }
       });
       break;
