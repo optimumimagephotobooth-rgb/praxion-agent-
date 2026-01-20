@@ -52,6 +52,59 @@ const config: Config = {
             filter: "drop-shadow(0 0 15px rgba(139, 92, 246, 0.5))"
           }
         },
+        "gentle-float": {
+          "0%, 100%": { transform: "translateY(0) scale(1)", opacity: "0.95" },
+          "50%": { transform: "translateY(-12px) scale(1.02)", opacity: "1" }
+        },
+        "gradient-shift": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" }
+        },
+        "float-particle": {
+          "0%": { transform: "translateY(0) translateX(0)", opacity: "0" },
+          "10%": { opacity: "0.5" },
+          "90%": { opacity: "0.5" },
+          "100%": {
+            transform: "translateY(-100vh) translateX(100px)",
+            opacity: "0"
+          }
+        },
+        ripple: {
+          to: { width: "300px", height: "300px", opacity: "0" }
+        },
+        "fade-in-up": {
+          from: { opacity: "0", transform: "translateY(24px)" },
+          to: { opacity: "1", transform: "translateY(0)" }
+        },
+        "fade-in-left": {
+          from: { opacity: "0", transform: "translateX(-24px)" },
+          to: { opacity: "1", transform: "translateX(0)" }
+        },
+        "fade-in-right": {
+          from: { opacity: "0", transform: "translateX(24px)" },
+          to: { opacity: "1", transform: "translateX(0)" }
+        },
+        "scale-in": {
+          from: { opacity: "0", transform: "scale(0.9)" },
+          to: { opacity: "1", transform: "scale(1)" }
+        },
+        "progress-pulse": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.7" }
+        },
+        "slide-in-right": {
+          from: { transform: "translateX(100%)", opacity: "0" },
+          to: { transform: "translateX(0)", opacity: "1" }
+        },
+        shrink: {
+          from: { width: "100%" },
+          to: { width: "0%" }
+        },
+        "grow-up": {
+          from: { height: "0", opacity: "0" },
+          to: { height: "var(--target-height)", opacity: "1" }
+        },
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-10px)" }
@@ -78,6 +131,18 @@ const config: Config = {
         "soft-ripple": "soft-ripple 2.4s ease-out infinite",
         "data-stream": "data-stream 8s linear infinite",
         "node-glow": "node-glow 3s ease-in-out infinite",
+        "gentle-float": "gentle-float 8s ease-in-out infinite",
+        "gradient-shift": "gradient-shift 15s ease infinite",
+        "float-particle": "float-particle 18s linear infinite",
+        ripple: "ripple 0.6s linear",
+        "fade-in-up": "fade-in-up 0.7s ease-out forwards",
+        "fade-in-left": "fade-in-left 0.7s ease-out forwards",
+        "fade-in-right": "fade-in-right 0.7s ease-out forwards",
+        "scale-in": "scale-in 0.7s ease-out forwards",
+        "progress-pulse": "progress-pulse 2s ease-in-out infinite",
+        "slide-in-right": "slide-in-right 0.4s ease-out",
+        shrink: "shrink 4s linear",
+        "grow-up": "grow-up 0.6s ease-out backwards",
         float: "float 6s ease-in-out infinite",
         "glow-pulse": "glow-pulse 3s ease-in-out infinite",
         shimmer: "shimmer 2s infinite linear",

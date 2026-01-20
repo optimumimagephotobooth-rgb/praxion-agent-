@@ -2,9 +2,8 @@
 
 import * as React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { RippleButton, StaggeredList, StaggeredListItem } from "@/components/effects";
 
 export interface ChecklistItem {
   id: string;
@@ -41,30 +40,26 @@ export function ReadinessChecklist({
           </span>
           <span className="font-medium text-emerald-400">Ready</span>
         </div>
-        <div className="space-y-3">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className={cn(
-                "flex items-center justify-between rounded-lg border border-slate-700/60 px-4 py-3",
-                item.complete ? "bg-emerald-500/10" : "bg-slate-900/60"
-              )}
-            >
-              <span className="text-sm text-slate-200">{item.label}</span>
-              <span
-                className={cn(
-                  "text-xs font-medium",
-                  item.complete ? "text-emerald-400" : "text-slate-400"
-                )}
-              >
-                {item.complete ? "Done" : "Pending"}
-              </span>
-            </div>
-          ))}
-        </div>
-        <Button className="w-full" onClick={onPrimaryAction}>
+        <StaggeredList
+          items={items.map((item) => ({
+            id: item.id,
+            content: (
+              <StaggeredListItem
+                title={item.label}
+                description={item.complete ? "Completed" : "Pending review"}
+                status={item.complete ? "success" : "warning"}
+                icon={item.complete ? "✅" : "⏳"}
+                isInteractive={false}
+              />
+            )
+          }))}
+          animationType="fadeInUp"
+          staggerDelay={0.08}
+          triggerOnView
+        />
+        <RippleButton className="w-full" onClick={onPrimaryAction}>
           Continue Setup
-        </Button>
+        </RippleButton>
       </CardContent>
     </Card>
   );

@@ -182,7 +182,7 @@ function MetricCard({
   className?: string;
 }) {
   return (
-    <Card className={cn("glass-card", className)}>
+    <Card className={cn("glass-card card-3d", className)}>
       <CardContent className="flex items-center justify-between p-4">
         <div>
           <div className="text-xs uppercase tracking-wide text-slate-400">

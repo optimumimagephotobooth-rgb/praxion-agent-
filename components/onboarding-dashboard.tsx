@@ -8,6 +8,7 @@ import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Toast } from "@/components/ui/toast";
+import { RippleButton } from "@/components/effects";
 
 type SubscriptionStatus = "ACTIVE" | "INACTIVE";
 type UiCustomerStatus = "INACTIVE" | "ACTIVE" | "TERMINATED";
@@ -218,9 +219,9 @@ export function OnboardingDashboard() {
             Add customers, validate readiness, and activate safely.
           </p>
         </div>
-        <Button variant="outline" onClick={() => setShowForm((prev) => !prev)}>
+        <RippleButton onClick={() => setShowForm((prev) => !prev)} className="px-5 py-2.5">
           {showForm ? "Close" : "Add Customer"}
-        </Button>
+        </RippleButton>
       </div>
 
       {showForm && (

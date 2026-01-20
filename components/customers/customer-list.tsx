@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api, type Customer } from "@/lib/api";
 import { AddCustomerDialog } from "@/components/customers/add-customer-dialog";
 import { N8nStatusIndicator } from "@/components/n8n";
+import { RippleButton } from "@/components/effects";
 
 interface CustomerListProps {
   onNavigate: (view: string, id?: number) => void;
@@ -76,10 +77,10 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
             Manage customer accounts and activation status
           </p>
         </div>
-        <Button onClick={() => setShowAddDialog(true)}>
-          <Plus className="mr-2 h-4 w-4" />
+        <RippleButton onClick={() => setShowAddDialog(true)} className="px-5 py-2.5">
+          <Plus className="h-4 w-4" />
           Add Customer
-        </Button>
+        </RippleButton>
       </div>
 
       <Input
@@ -107,7 +108,7 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
         }}
       />
 
-      <Card className="glass-card">
+      <Card className="glass-card card-3d">
         <CardHeader>
           <CardTitle className="text-sm font-medium uppercase tracking-wide text-slate-400">
             Customer List

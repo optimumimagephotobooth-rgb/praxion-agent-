@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Activity, BarChart3, CreditCard, Plus, Users, type LucideIcon } from "lucide-react";
 import { N8nGlassCard, N8nPipeline, N8nStatusIndicator } from "@/components/n8n";
+import { MagneticButton, ProgressRingGroup, RippleButton } from "@/components/effects";
 
 interface DashboardPageProps {
   onNavigate?: (view: string) => void;
@@ -33,8 +34,9 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
       <div className="pointer-events-none absolute -top-16 left-6 h-44 w-44 rounded-full bg-gradient-to-r from-purple-600/10 to-cyan-600/10 blur-3xl animate-ambient-glow" />
       <div className="pointer-events-none absolute right-6 top-40 h-56 w-56 rounded-full bg-gradient-to-r from-cyan-600/10 to-purple-600/10 blur-3xl animate-ambient-glow [animation-delay:1000ms]" />
 
-      <Card className="glass-card cyber-border card-hover animate-gentle-pulse shadow-[0_12px_40px_rgba(139,92,246,0.25)]">
-        <CardContent className="space-y-1 p-6">
+      <Card className="glass-card cyber-border card-hover animate-gentle-pulse relative overflow-hidden shadow-[0_12px_40px_rgba(139,92,246,0.25)]">
+        <div className="pointer-events-none absolute inset-0 gradient-animate opacity-15" />
+        <CardContent className="relative z-10 space-y-1 p-6">
           <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-slate-400">
             <SignalDot tone="green" />
             Live system status
@@ -88,19 +90,19 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
         </CardHeader>
         <CardContent className="p-6">
           <div className="flex flex-wrap items-center gap-3">
-            <Button onClick={handlePrimaryAction}>
-              <Plus className="mr-2 h-4 w-4" />
+            <RippleButton onClick={handlePrimaryAction} className="px-5 py-2.5">
+              <Plus className="h-4 w-4" />
               Manage Customers
-            </Button>
-            <Button variant="outline">
+            </RippleButton>
+            <MagneticButton variant="secondary" className="px-4 py-2">
               View Analytics
-            </Button>
+            </MagneticButton>
             <Button variant="outline">
               Billing
             </Button>
-            <Button variant="outline">
+            <MagneticButton variant="ghost" className="px-4 py-2">
               Reports
-            </Button>
+            </MagneticButton>
           </div>
         </CardContent>
       </Card>
@@ -141,6 +143,50 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
           ]}
         />
       </N8nGlassCard>
+
+      <Card className="glass-card card-hover animate-fadeIn">
+        <CardHeader className="border-b border-slate-700/60 pb-4">
+          <CardTitle className="text-lg font-semibold text-slate-100">
+            Readiness Metrics
+          </CardTitle>
+          <CardDescription>Live onboarding preparation signals.</CardDescription>
+        </CardHeader>
+        <CardContent className="p-6">
+          <ProgressRingGroup
+            columns={3}
+            rings={[
+              {
+                title: "Customer Readiness",
+                description: "Overall preparation score",
+                progress: 86,
+                variant: "success",
+                size: 140,
+                label: "Ready",
+                icon: Users
+              },
+              {
+                title: "Payment Success",
+                description: "Successful transaction rate",
+                progress: 92,
+                variant: "success",
+                size: 140,
+                label: "Healthy",
+                icon: CreditCard
+              },
+              {
+                title: "Documentation",
+                description: "Compliance completeness",
+                progress: 64,
+                variant: "warning",
+                size: 140,
+                label: "In review",
+                action: "View Details",
+                icon: Activity
+              }
+            ]}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -165,7 +211,7 @@ function StatsCard({
   };
 
   return (
-    <Card className="glass-card card-hover animate-fadeIn overflow-hidden">
+    <Card className="glass-card card-hover animate-fadeIn overflow-hidden floating-card card-3d">
       <div className={`h-0.5 w-full ${toneClasses[tone].split(" ")[0]}`} />
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
