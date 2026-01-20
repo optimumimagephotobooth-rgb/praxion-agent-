@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { EnhancedButton } from "@/components/ui/EnhancedButton";
 import { ProgressRingGroup } from "@/components/ui/ProgressRing";
 import { StaggeredGrid, StaggeredList } from "@/components/ui/StaggeredList";
@@ -17,6 +18,38 @@ import {
 } from "lucide-react";
 
 export default function EnhancedDashboard() {
+  const [actionStatus, setActionStatus] = React.useState<string | null>(null);
+  const [isBusy, setIsBusy] = React.useState(false);
+  const customerId = 1;
+  const testPhone = "+15550108899";
+
+  const callApi = async (
+    label: string,
+    input: { url: string; method?: "GET" | "POST"; body?: Record<string, unknown> }
+  ) => {
+    setIsBusy(true);
+    setActionStatus(`${label}...`);
+    try {
+      const res = await fetch(input.url, {
+        method: input.method ?? "POST",
+        headers: input.body ? { "Content-Type": "application/json" } : undefined,
+        body: input.body ? JSON.stringify(input.body) : undefined
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(data?.error ?? data?.reason ?? "Request failed");
+      }
+      setActionStatus(`${label} ✓`);
+      return data;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Request failed";
+      setActionStatus(`${label} ✕ (${message})`);
+      throw err;
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
   const customers = [
     { id: 1, name: "Acme Heating Co.", email: "ops@acmeheating.com", status: "active" },
     { id: 2, name: "Tech Solutions Inc.", email: "info@techsolutions.com", status: "pending" },
@@ -52,17 +85,40 @@ export default function EnhancedDashboard() {
           </div>
 
           <div className="flex items-center gap-3">
-            <EnhancedButton variant="ghost">
+            <EnhancedButton
+              variant="ghost"
+              disabled={isBusy}
+              onClick={() =>
+                callApi("Open settings", {
+                  url: "/api/events",
+                  body: {
+                    type: "OPEN_SETTINGS",
+                    customerId,
+                    timestamp: new Date().toISOString()
+                  }
+                })
+              }
+            >
               <Settings className="h-4 w-4" />
               Settings
             </EnhancedButton>
 
-            <EnhancedButton magnetic>
+            <EnhancedButton
+              magnetic
+              disabled={isBusy}
+              onClick={() => callApi("Fetch customers", { url: "/api/customers", method: "GET" })}
+            >
               <Plus className="h-4 w-4" />
               Add Customer
             </EnhancedButton>
           </div>
         </div>
+
+        {actionStatus && (
+          <div className="mb-4 rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm text-slate-300">
+            {actionStatus}
+          </div>
+        )}
 
         <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
           <div className="rounded-xl glass-card card-hover">
@@ -161,17 +217,51 @@ export default function EnhancedDashboard() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 pt-4">
-                  <EnhancedButton variant="primary" magnetic>
+                  <EnhancedButton
+                    variant="primary"
+                    magnetic
+                    disabled={isBusy}
+                    onClick={() =>
+                      callApi("Activate customer", {
+                        url: "/api/customers/activate",
+                        body: { customerId }
+                      })
+                    }
+                  >
                     <Zap className="h-4 w-4" />
                     Activate Customer
                   </EnhancedButton>
 
-                  <EnhancedButton variant="secondary" magnetic>
+                  <EnhancedButton
+                    variant="secondary"
+                    magnetic
+                    disabled={isBusy}
+                    onClick={() =>
+                      callApi("Deactivate customer", {
+                        url: "/api/customers/deactivate",
+                        body: { customerId, reason: "Manual action" }
+                      })
+                    }
+                  >
                     <Shield className="h-4 w-4" />
                     Deactivate Customer
                   </EnhancedButton>
 
-                  <EnhancedButton variant="ghost">
+                  <EnhancedButton
+                    variant="ghost"
+                    disabled={isBusy}
+                    onClick={() =>
+                      callApi("Issue summary", {
+                        url: "/api/events",
+                        body: {
+                          type: "ISSUE_SUMMARY_REQUESTED",
+                          customerId,
+                          timestamp: new Date().toISOString(),
+                          payload: { source: "dashboard" }
+                        }
+                      })
+                    }
+                  >
                     <AlertCircle className="h-4 w-4" />
                     Issue Summary
                   </EnhancedButton>
@@ -222,19 +312,53 @@ export default function EnhancedDashboard() {
         </div>
 
         <div className="mt-8 flex flex-wrap gap-3">
-          <EnhancedButton variant="ghost" magnetic>
+          <EnhancedButton
+            variant="ghost"
+            magnetic
+            disabled={isBusy}
+            onClick={() => callApi("Load customers", { url: "/api/customers", method: "GET" })}
+          >
             <Users className="h-4 w-4" />
             View All Customers
             <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </EnhancedButton>
 
-          <EnhancedButton variant="ghost" magnetic>
+          <EnhancedButton
+            variant="ghost"
+            magnetic
+            disabled={isBusy}
+            onClick={() =>
+              callApi("Send SMS", {
+                url: "/api/sms/execute",
+                body: {
+                  customerId: String(customerId),
+                  to: testPhone,
+                  template: "MISSED_CALL_FOLLOWUP",
+                  context: { businessName: "Praxion" }
+                }
+              })
+            }
+          >
             <CreditCard className="h-4 w-4" />
             Billing Overview
             <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </EnhancedButton>
 
-          <EnhancedButton variant="ghost" magnetic>
+          <EnhancedButton
+            variant="ghost"
+            magnetic
+            disabled={isBusy}
+            onClick={() =>
+              callApi("Place voice call", {
+                url: "/api/voice/execute",
+                body: {
+                  customerId: String(customerId),
+                  to: testPhone,
+                  message: "Hello from Praxion. This is a test call."
+                }
+              })
+            }
+          >
             <Upload className="h-4 w-4" />
             Export Data
             <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
