@@ -4,8 +4,20 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export function ParticleBackground({ className }: { className?: string }) {
-  const particles = React.useMemo(
-    () =>
+  const [particles, setParticles] = React.useState<
+    Array<{
+      id: number;
+      size: number;
+      left: number;
+      top: number;
+      alpha: number;
+      duration: number;
+      delay: number;
+    }>
+  >([]);
+
+  React.useEffect(() => {
+    setParticles(
       Array.from({ length: 30 }, (_, index) => ({
         id: index,
         size: Math.random() * 4 + 1,
@@ -14,9 +26,13 @@ export function ParticleBackground({ className }: { className?: string }) {
         alpha: Math.random() * 0.3 + 0.1,
         duration: Math.random() * 20 + 10,
         delay: Math.random() * 5
-      })),
-    []
-  );
+      }))
+    );
+  }, []);
+
+  if (particles.length === 0) {
+    return null;
+  }
 
   return (
     <div className={cn("fixed inset-0 overflow-hidden pointer-events-none", className)}>

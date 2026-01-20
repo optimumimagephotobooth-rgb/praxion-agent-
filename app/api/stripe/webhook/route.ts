@@ -6,6 +6,16 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
   apiVersion: "2023-10-16"
 });
 
+const getInvoiceCustomerId = (invoice: Stripe.Invoice) => {
+  if (typeof invoice.customer === "string") {
+    return invoice.customer;
+  }
+  if (invoice.customer && typeof invoice.customer === "object" && "id" in invoice.customer) {
+    return invoice.customer.id;
+  }
+  return "unknown";
+};
+
 export async function POST(req: NextRequest) {
   const signature = req.headers.get("stripe-signature");
 
@@ -33,8 +43,7 @@ export async function POST(req: NextRequest) {
   switch (event.type) {
     case "invoice.payment_failed": {
       const invoice = event.data.object as Stripe.Invoice;
-      const customerId =
-        typeof invoice.customer === "string" ? invoice.customer : "unknown";
+      const customerId = getInvoiceCustomerId(invoice);
       emitEvent({
         type: "PAYMENT_FAILED",
         customerId,
@@ -47,8 +56,7 @@ export async function POST(req: NextRequest) {
     }
     case "invoice.payment_succeeded": {
       const invoice = event.data.object as Stripe.Invoice;
-      const customerId =
-        typeof invoice.customer === "string" ? invoice.customer : "unknown";
+      const customerId = getInvoiceCustomerId(invoice);
       emitEvent({
         type: "PAYMENT_SUCCEEDED",
         customerId,

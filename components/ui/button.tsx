@@ -2,7 +2,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "default" | "outline";
+  variant?: "default" | "outline" | "ghost";
   size?: "sm" | "md";
 };
 
@@ -12,7 +12,8 @@ const baseStyles =
 const variants = {
   default: "bg-primary text-white hover:bg-primary-hover hover:shadow-lg",
   outline:
-    "border border-slate-600/70 bg-slate-900/40 text-slate-100 hover:border-secondary hover:bg-slate-900/70 border-transition"
+    "border border-slate-600/70 bg-slate-900/40 text-slate-100 hover:border-secondary hover:bg-slate-900/70 border-transition",
+  ghost: "bg-transparent text-slate-300 hover:text-white hover:bg-slate-800/50"
 };
 
 const sizes = {
