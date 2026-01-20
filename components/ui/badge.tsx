@@ -6,17 +6,17 @@ export type BadgeProps = React.HTMLAttributes<HTMLDivElement> & {
 };
 
 const variants = {
-  default: "bg-[#3B82F6]/10 text-[#3B82F6]",
-  success: "bg-[#10B981]/10 text-[#10B981]",
-  warning: "bg-[#F59E0B]/10 text-[#F59E0B]",
-  destructive: "bg-[#EF4444]/10 text-[#EF4444]"
+  default: "bg-primary/10 text-primary",
+  success: "bg-success/10 text-success",
+  warning: "bg-warning/10 text-warning",
+  destructive: "bg-error/10 text-error"
 };
 
 export function Badge({ className, variant = "default", ...props }: BadgeProps) {
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium animate-fadeIn",
         variants[variant],
         className
       )}

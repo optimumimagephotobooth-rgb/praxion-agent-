@@ -5,6 +5,7 @@ type CardVariant = "default" | "muted";
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: CardVariant;
+  hover?: boolean;
 }
 
 const cardVariants: Record<CardVariant, string> = {
@@ -12,10 +13,20 @@ const cardVariants: Record<CardVariant, string> = {
   muted: "border-slate-200 bg-slate-50/50"
 };
 
-export function Card({ className, variant = "default", ...props }: CardProps) {
+export function Card({
+  className,
+  variant = "default",
+  hover = true,
+  ...props
+}: CardProps) {
   return (
     <div
-      className={cn("rounded-lg border", cardVariants[variant], className)}
+      className={cn(
+        "rounded-lg border",
+        cardVariants[variant],
+        hover && "card-hover",
+        className
+      )}
       {...props}
     />
   );

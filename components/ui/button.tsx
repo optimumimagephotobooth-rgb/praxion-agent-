@@ -7,11 +7,12 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const baseStyles =
-  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+  "btn-base inline-flex items-center justify-center rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-95";
 
 const variants = {
-  default: "bg-[#3B82F6] text-white hover:bg-[#2563EB]",
-  outline: "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+  default: "bg-primary text-white hover:bg-primary-hover hover:shadow-lg",
+  outline:
+    "border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 border-transition"
 };
 
 const sizes = {

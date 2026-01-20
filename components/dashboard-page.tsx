@@ -37,7 +37,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
 
   return (
     <div className="space-y-6">
-      <Card className="border-white/40 bg-gradient-to-r from-blue-600/10 via-indigo-500/10 to-cyan-500/10 shadow-[0_8px_30px_rgba(0,0,0,0.04)] backdrop-blur-sm">
+      <Card className="card-hover animate-fadeIn border-white/40 bg-gradient-to-r from-primary/15 via-info/10 to-emerald/15 shadow-[0_10px_35px_rgba(59,130,246,0.18)] backdrop-blur-sm">
         <CardContent className="space-y-1 p-6">
           <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-gray-500">
             <SignalDot tone="green" />
@@ -83,7 +83,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
         />
       </div>
 
-      <Card className="border-white/40 bg-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)] backdrop-blur-sm">
+      <Card className="card-hover animate-fadeIn border-white/40 bg-white/85 shadow-[0_10px_35px_rgba(15,23,42,0.08)] backdrop-blur-sm">
         <CardHeader className="border-b border-white/60 pb-4">
           <CardTitle className="text-lg font-semibold text-gray-900">
             Quick Actions
@@ -92,27 +92,24 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
         </CardHeader>
         <CardContent className="p-6">
           <div className="flex flex-wrap items-center gap-3">
-            <Button
-              onClick={handlePrimaryAction}
-              className="bg-blue-600 text-white hover:bg-blue-700 hover:scale-[1.02]"
-            >
+            <Button onClick={handlePrimaryAction}>
               <Plus className="mr-2 h-4 w-4" />
               Manage Customers
             </Button>
-            <Button variant="outline" className="hover:scale-[1.02]">
+            <Button variant="outline">
               View Analytics
             </Button>
-            <Button variant="outline" className="hover:scale-[1.02]">
+            <Button variant="outline">
               Billing
             </Button>
-            <Button variant="outline" className="hover:scale-[1.02]">
+            <Button variant="outline">
               Reports
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="border-white/40 bg-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)] backdrop-blur-sm">
+      <Card className="card-hover animate-fadeIn border-white/40 bg-white/85 shadow-[0_10px_35px_rgba(15,23,42,0.08)] backdrop-blur-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-base font-semibold text-gray-900">
             System Status
@@ -143,13 +140,13 @@ function StatsCard({
   tone: "blue" | "green" | "emerald";
 }) {
   const toneClasses = {
-    blue: "border-blue-500 bg-blue-100 text-blue-600",
-    green: "border-green-500 bg-green-100 text-green-600",
-    emerald: "border-emerald-500 bg-emerald-100 text-emerald-600"
+    blue: "border-primary/60 bg-primary/10 text-primary",
+    green: "border-success/60 bg-success/10 text-success",
+    emerald: "border-emerald/60 bg-emerald/10 text-emerald"
   };
 
   return (
-    <Card className="overflow-hidden border-white/40 bg-white/80 shadow-[0_8px_30px_rgba(0,0,0,0.04)] backdrop-blur-sm transition hover:shadow-md">
+    <Card className="card-hover animate-fadeIn overflow-hidden border-white/40 bg-white/85 shadow-[0_10px_35px_rgba(15,23,42,0.08)] backdrop-blur-sm">
       <div className={`h-0.5 w-full ${toneClasses[tone].split(" ")[0]}`} />
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
@@ -179,7 +176,7 @@ function StatusRow({
   tone: "green" | "blue" | "emerald";
 }) {
   return (
-    <div className="flex items-center justify-between rounded-md border border-white/60 bg-white/70 px-3 py-2">
+    <div className="border-transition flex items-center justify-between rounded-md border border-white/60 bg-white/70 px-3 py-2">
       <span className="text-gray-500">{label}</span>
       <span className="flex items-center gap-2 font-medium text-gray-700">
         <SignalDot tone={tone} />
