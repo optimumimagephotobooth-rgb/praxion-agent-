@@ -10,15 +10,8 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Activity,
-  BarChart3,
-  CheckCircle2,
-  CreditCard,
-  Plus,
-  Users,
-  type LucideIcon
-} from "lucide-react";
+import { Activity, BarChart3, CreditCard, Plus, Users, type LucideIcon } from "lucide-react";
+import { N8nGlassCard, N8nPipeline, N8nStatusIndicator } from "@/components/n8n";
 
 interface DashboardPageProps {
   onNavigate?: (view: string) => void;
@@ -36,8 +29,11 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
   };
 
   return (
-    <div className="space-y-6">
-      <Card className="glass-card cyber-border card-hover animate-fadeIn shadow-[0_12px_40px_rgba(139,92,246,0.25)]">
+    <div className="relative space-y-6">
+      <div className="pointer-events-none absolute -top-16 left-6 h-44 w-44 rounded-full bg-gradient-to-r from-purple-600/10 to-cyan-600/10 blur-3xl animate-ambient-glow" />
+      <div className="pointer-events-none absolute right-6 top-40 h-56 w-56 rounded-full bg-gradient-to-r from-cyan-600/10 to-purple-600/10 blur-3xl animate-ambient-glow [animation-delay:1000ms]" />
+
+      <Card className="glass-card cyber-border card-hover animate-gentle-pulse shadow-[0_12px_40px_rgba(139,92,246,0.25)]">
         <CardContent className="space-y-1 p-6">
           <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-slate-400">
             <SignalDot tone="green" />
@@ -111,9 +107,12 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
 
       <Card className="glass-card card-hover animate-fadeIn">
         <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold text-slate-100">
-            System Status
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base font-semibold text-slate-100">
+              System Status
+            </CardTitle>
+            <N8nStatusIndicator status="active" />
+          </div>
           <CardDescription>Read-only operational signals</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 text-sm text-slate-400">
@@ -122,6 +121,26 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
           <StatusRow label="Last Deployment" value="3 hours ago" tone="emerald" />
         </CardContent>
       </Card>
+
+      <N8nGlassCard intensity="medium">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-semibold text-slate-100">Automation Pipeline</h3>
+            <p className="text-sm text-slate-400">
+              Live orchestration snapshot across core workflow stages.
+            </p>
+          </div>
+          <N8nStatusIndicator status="processing" />
+        </div>
+        <N8nPipeline
+          steps={[
+            { id: "input", title: "Input", status: "Receiving", active: true, icon: "📥" },
+            { id: "process", title: "Process", status: "Transforming", active: true, icon: "⚙️" },
+            { id: "validate", title: "Validate", status: "Pending", active: false, icon: "✅" },
+            { id: "output", title: "Output", status: "Ready", active: false, icon: "📤" }
+          ]}
+        />
+      </N8nGlassCard>
     </div>
   );
 }

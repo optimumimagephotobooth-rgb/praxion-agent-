@@ -2,8 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { RefreshButton } from "@/components/monitoring/refresh-button";
+import { N8nStatusIndicator } from "@/components/n8n";
 import { getEventLog, type DomainEvent } from "@/lib/domain-events";
 import { listCustomers, type CustomerState } from "@/lib/mock-customer-store";
+import { cn } from "@/lib/utils";
 
 function formatPayload(payload: DomainEvent["payload"]) {
   if (!payload) return "—";
@@ -43,7 +45,12 @@ export default function MonitoringPage() {
 
       <div className="grid gap-4 md:grid-cols-4">
         <MetricCard label="Total customers" value={totals.total} />
-        <MetricCard label="Active" value={totals.active} variant="success" />
+        <MetricCard
+          label="Active"
+          value={totals.active}
+          variant="success"
+          className="animate-gentle-pulse"
+        />
         <MetricCard label="Paused" value={totals.paused} variant="default" />
         <MetricCard label="Terminated" value={totals.terminated} variant="destructive" />
       </div>
@@ -128,17 +135,29 @@ export default function MonitoringPage() {
                       #{customer.id}
                     </TableCell>
                     <TableCell>
-                      <Badge
-                        variant={
-                          customer.status === "ACTIVE"
-                            ? "success"
-                            : customer.status === "TERMINATED"
-                            ? "destructive"
-                            : "warning"
-                        }
-                      >
-                        {customer.status}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <N8nStatusIndicator
+                          status={
+                            customer.status === "ACTIVE"
+                              ? "active"
+                              : customer.status === "TERMINATED"
+                              ? "error"
+                              : "warning"
+                          }
+                          size="sm"
+                        />
+                        <Badge
+                          variant={
+                            customer.status === "ACTIVE"
+                              ? "success"
+                              : customer.status === "TERMINATED"
+                              ? "destructive"
+                              : "warning"
+                          }
+                        >
+                          {customer.status}
+                        </Badge>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
@@ -154,14 +173,16 @@ export default function MonitoringPage() {
 function MetricCard({
   label,
   value,
-  variant = "default"
+  variant = "default",
+  className
 }: {
   label: string;
   value: number;
   variant?: "default" | "success" | "destructive";
+  className?: string;
 }) {
   return (
-    <Card className="glass-card">
+    <Card className={cn("glass-card", className)}>
       <CardContent className="flex items-center justify-between p-4">
         <div>
           <div className="text-xs uppercase tracking-wide text-slate-400">

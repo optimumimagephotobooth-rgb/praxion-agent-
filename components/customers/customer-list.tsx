@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api, type Customer } from "@/lib/api";
 import { AddCustomerDialog } from "@/components/customers/add-customer-dialog";
+import { N8nStatusIndicator } from "@/components/n8n";
 
 interface CustomerListProps {
   onNavigate: (view: string, id?: number) => void;
@@ -139,17 +140,29 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
                       {customer.name}
                     </td>
                     <td className="px-6 py-4">
-                      <Badge
-                        variant={
-                          customer.status === "ACTIVE"
-                            ? "success"
-                            : customer.status === "PAUSED"
-                            ? "warning"
-                            : "destructive"
-                        }
-                      >
-                        {customer.status === "PAUSED" ? "INACTIVE" : customer.status}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <N8nStatusIndicator
+                          status={
+                            customer.status === "ACTIVE"
+                              ? "active"
+                              : customer.status === "PAUSED"
+                              ? "warning"
+                              : "error"
+                          }
+                          size="sm"
+                        />
+                        <Badge
+                          variant={
+                            customer.status === "ACTIVE"
+                              ? "success"
+                              : customer.status === "PAUSED"
+                              ? "warning"
+                              : "destructive"
+                          }
+                        >
+                          {customer.status === "PAUSED" ? "INACTIVE" : customer.status}
+                        </Badge>
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-slate-300">
                       {customer.plan || "—"}

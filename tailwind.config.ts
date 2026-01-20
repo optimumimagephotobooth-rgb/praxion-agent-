@@ -22,6 +22,36 @@ const config: Config = {
           "0%": { opacity: "0", transform: "translateX(-10px)" },
           "100%": { opacity: "1", transform: "translateX(0)" }
         },
+        "ambient-glow": {
+          "0%, 100%": { opacity: "0.5", transform: "scale(1)" },
+          "50%": { opacity: "1", transform: "scale(1.02)" }
+        },
+        "gentle-pulse": {
+          "0%, 100%": {
+            boxShadow:
+              "0 0 30px rgba(139, 92, 246, 0.1), 0 0 60px rgba(6, 182, 212, 0.05)"
+          },
+          "50%": {
+            boxShadow:
+              "0 0 40px rgba(139, 92, 246, 0.15), 0 0 80px rgba(6, 182, 212, 0.08)"
+          }
+        },
+        "soft-ripple": {
+          "0%": { transform: "translate(-50%, -50%) scale(0.8)", opacity: "0.8" },
+          "100%": { transform: "translate(-50%, -50%) scale(1.5)", opacity: "0" }
+        },
+        "data-stream": {
+          "0%": { backgroundPosition: "-100% 0" },
+          "100%": { backgroundPosition: "200% 0" }
+        },
+        "node-glow": {
+          "0%, 100%": {
+            filter: "drop-shadow(0 0 5px rgba(139, 92, 246, 0.3))"
+          },
+          "50%": {
+            filter: "drop-shadow(0 0 15px rgba(139, 92, 246, 0.5))"
+          }
+        },
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-10px)" }
@@ -43,6 +73,11 @@ const config: Config = {
         "fade-in": "fadeIn 0.4s ease-out",
         "slide-in": "slideIn 0.3s ease-out",
         "pulse-slow": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "ambient-glow": "ambient-glow 4s ease-in-out infinite",
+        "gentle-pulse": "gentle-pulse 6s ease-in-out infinite",
+        "soft-ripple": "soft-ripple 2.4s ease-out infinite",
+        "data-stream": "data-stream 8s linear infinite",
+        "node-glow": "node-glow 3s ease-in-out infinite",
         float: "float 6s ease-in-out infinite",
         "glow-pulse": "glow-pulse 3s ease-in-out infinite",
         shimmer: "shimmer 2s infinite linear",

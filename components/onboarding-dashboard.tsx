@@ -208,9 +208,10 @@ export function OnboardingDashboard() {
         </div>
       )}
 
-      <div className="flex items-start justify-between">
+      <div className="relative flex items-start justify-between">
+        <div className="pointer-events-none absolute -top-8 left-0 h-28 w-28 rounded-full bg-gradient-to-r from-purple-600/15 to-cyan-600/15 blur-2xl animate-ambient-glow" />
         <div>
-          <h1 className="text-2xl font-semibold text-slate-100">
+          <h1 className="text-2xl font-semibold text-slate-100 bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent animate-ambient-glow">
             Customer Onboarding
           </h1>
           <p className="text-sm text-slate-400">
