@@ -281,6 +281,56 @@
   }
 }
 
+@keyframes ambient-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes ambient-pulse-slow {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1) translate(0, 0);
+  }
+  33% {
+    opacity: 0.4;
+    transform: scale(1.02) translate(20px, -20px);
+  }
+  66% {
+    opacity: 0.3;
+    transform: scale(1.01) translate(-10px, 10px);
+  }
+}
+
+@keyframes gentle-drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(30px, 20px);
+  }
+}
+
+@keyframes color-shift {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(20deg);
+  }
+  100% {
+    filter: hue-rotate(0deg);
+  }
+}
+
 .animate-ambient-glow {
   animation: ambient-glow 4s ease-in-out infinite;
 }
@@ -484,6 +534,33 @@
 
   .animate-progress-pulse {
     animation: progressPulse 2s ease-in-out infinite;
+  }
+
+  .animate-ambient-pulse {
+    animation: ambient-pulse 12s ease-in-out infinite;
+  }
+
+  .animate-ambient-pulse-slow {
+    animation: ambient-pulse-slow 20s ease-in-out infinite;
+  }
+
+  .animate-gentle-drift {
+    animation: gentle-drift 30s ease-in-out infinite;
+  }
+
+  .animate-color-shift {
+    animation: color-shift 60s ease-in-out infinite;
+  }
+
+  .glass-morphism {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-purple-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent;
   }
 
   .parallax-layer {
