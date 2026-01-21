@@ -30,7 +30,12 @@ export default function EnhancedDashboard() {
   const [selectedCustomerId, setSelectedCustomerId] = React.useState<string | null>(null);
   const [integrationsStatus, setIntegrationsStatus] = React.useState<
     | {
-        supabase: { configured: boolean; ok: boolean; error: string | null };
+        supabase: {
+          configured: boolean;
+          ok: boolean;
+          error: string | null;
+          env?: { url: boolean; serviceRoleKey: boolean };
+        };
         n8n: { configured: boolean };
       }
     | null
@@ -53,11 +58,17 @@ export default function EnhancedDashboard() {
       const rawText = await res.text().catch(() => "");
       const data = rawText ? (JSON.parse(rawText) as Record<string, unknown>) : null;
       if (!res.ok) {
+        const dataError =
+          data && typeof data === "object" && "error" in data && typeof data.error === "string"
+            ? data.error
+            : null;
+        const dataReason =
+          data && typeof data === "object" && "reason" in data && typeof data.reason === "string"
+            ? data.reason
+            : null;
         const errorMessage =
-          (data && (data.error ?? data.reason)) ||
-          (rawText ? rawText.slice(0, 180) : null) ||
-          `Request failed (${res.status})`;
-        throw new Error(errorMessage);
+          dataError ?? dataReason ?? (rawText ? rawText.slice(0, 180) : null) ?? "";
+        throw new Error(errorMessage || `Request failed (${res.status})`);
       }
       setActionStatus(`${label} ✓`);
       return data;
@@ -205,6 +216,17 @@ export default function EnhancedDashboard() {
                       : "Error"
                     : "Not configured"}
                 </div>
+                {integrationsStatus.supabase.env && (
+                  <div className="rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1 text-[11px] text-slate-400">
+                    Supabase env:
+                    <span className="ml-1">
+                      URL {integrationsStatus.supabase.env.url ? "✓" : "✕"}
+                    </span>
+                    <span className="ml-2">
+                      Key {integrationsStatus.supabase.env.serviceRoleKey ? "✓" : "✕"}
+                    </span>
+                  </div>
+                )}
                 <div
                   className={`rounded-full px-3 py-1 text-xs font-medium ${
                     integrationsStatus.n8n.configured
