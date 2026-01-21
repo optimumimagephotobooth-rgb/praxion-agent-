@@ -11,7 +11,7 @@ import { api, type Customer } from "@/lib/api";
 
 interface CustomerDetailProps {
   onNavigate: (view: string) => void;
-  id?: number;
+  id?: string;
 }
 
 interface ToastState {

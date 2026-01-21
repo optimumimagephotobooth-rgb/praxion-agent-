@@ -22,7 +22,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
   const router = useRouter();
   const [actionStatus, setActionStatus] = React.useState<string | null>(null);
   const [isBusy, setIsBusy] = React.useState(false);
-  const customerId = 1;
+  const [customerId, setCustomerId] = React.useState<string | null>(null);
   const testPhone = "+15550108899";
 
   const handlePrimaryAction = () => {
@@ -60,6 +60,23 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
     }
   };
 
+  React.useEffect(() => {
+    const loadCustomerId = async () => {
+      try {
+        const response = await fetch("/api/customers?page=1&limit=1");
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error("Failed to load customers");
+        }
+        const first = (data?.data ?? [])[0];
+        setCustomerId(first?.id ?? null);
+      } catch {
+        setCustomerId(null);
+      }
+    };
+    loadCustomerId();
+  }, []);
+
   return (
     <div className="relative space-y-6">
       <div className="pointer-events-none absolute -top-16 left-6 h-44 w-44 rounded-full bg-gradient-to-r from-purple-600/10 to-cyan-600/10 blur-3xl animate-ambient-glow" />
@@ -84,6 +101,11 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
       {actionStatus && (
         <div className="rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm text-slate-300">
           {actionStatus}
+        </div>
+      )}
+      {!customerId && (
+        <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-200">
+          Add a customer to enable action buttons.
         </div>
       )}
 
@@ -134,7 +156,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
             <MagneticButton
               variant="secondary"
               className="px-4 py-2"
-              disabled={isBusy}
+              disabled={isBusy || !customerId}
               onClick={() =>
                 callApi("View analytics", {
                   url: "/api/events",
@@ -150,7 +172,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
             </MagneticButton>
             <Button
               variant="outline"
-              disabled={isBusy}
+              disabled={isBusy || !customerId}
               onClick={() =>
                 callApi("Send billing SMS", {
                   url: "/api/sms/execute",
@@ -168,7 +190,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
             <MagneticButton
               variant="ghost"
               className="px-4 py-2"
-              disabled={isBusy}
+              disabled={isBusy || !customerId}
               onClick={() =>
                 callApi("Run report", {
                   url: "/api/events",

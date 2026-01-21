@@ -16,11 +16,11 @@ import { type CustomerStatus } from "@/lib/api";
  */
 export async function POST(req: NextRequest) {
   const body = (await req.json().catch(() => null)) as {
-    customerId?: number;
+    customerId?: string;
     reason?: string;
   } | null;
 
-  if (!body || typeof body.customerId !== "number") {
+  if (!body || typeof body.customerId !== "string") {
     return NextResponse.json({ success: false }, { status: 400 });
   }
 
@@ -73,7 +73,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true });
   }
 
-  const result = deactivateCustomer(customerId);
+  const numericId = Number(customerId);
+  if (Number.isNaN(numericId)) {
+    return NextResponse.json({ success: false }, { status: 400 });
+  }
+
+  const result = deactivateCustomer(numericId);
   if (!result.allowed) {
     return NextResponse.json({ success: false }, { status: 400 });
   }

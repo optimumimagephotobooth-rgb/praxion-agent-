@@ -23,8 +23,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ called: false, dryRun: true });
   }
 
-  const customerId = Number(body.customerId);
-  if (Number.isNaN(customerId)) {
+  const customerId = body.customerId;
+  if (!customerId) {
     return NextResponse.json({ called: false, reason: "INVALID_CUSTOMER" }, { status: 400 });
   }
 

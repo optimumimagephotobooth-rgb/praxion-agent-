@@ -4,6 +4,8 @@ import * as React from "react";
 import { EnhancedButton } from "@/components/ui/EnhancedButton";
 import { ProgressRingGroup } from "@/components/ui/ProgressRing";
 import { StaggeredGrid, StaggeredList } from "@/components/ui/StaggeredList";
+import { type Customer } from "@/lib/api";
+import { useRouter } from "next/navigation";
 import {
   AlertCircle,
   CheckCircle,
@@ -18,10 +20,13 @@ import {
 } from "lucide-react";
 
 export default function EnhancedDashboard() {
+  const router = useRouter();
   const [actionStatus, setActionStatus] = React.useState<string | null>(null);
   const [isBusy, setIsBusy] = React.useState(false);
-  const customerId = 1;
   const testPhone = "+15550108899";
+  const [customers, setCustomers] = React.useState<Customer[]>([]);
+  const [loadingCustomers, setLoadingCustomers] = React.useState(false);
+  const [selectedCustomerId, setSelectedCustomerId] = React.useState<string | null>(null);
 
   const callApi = async (
     label: string,
@@ -50,12 +55,34 @@ export default function EnhancedDashboard() {
     }
   };
 
-  const customers = [
-    { id: 1, name: "Acme Heating Co.", email: "ops@acmeheating.com", status: "active" },
-    { id: 2, name: "Tech Solutions Inc.", email: "info@techsolutions.com", status: "pending" },
-    { id: 3, name: "Global Retail Ltd.", email: "support@globalretail.com", status: "active" },
-    { id: 4, name: "Cloud Dynamics", email: "contact@clouddynamics.io", status: "inactive" }
-  ];
+  const selectedCustomer =
+    customers.find((customer) => customer.id === selectedCustomerId) ?? null;
+  const customerId = selectedCustomer?.id ?? "";
+
+  const loadCustomers = async () => {
+    setLoadingCustomers(true);
+    try {
+      const response = await fetch("/api/customers?page=1&limit=50");
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.error ?? "Failed to load customers");
+      }
+      const list = (data?.data ?? []) as Customer[];
+      setCustomers(list);
+      if (list.length > 0 && !selectedCustomerId) {
+        setSelectedCustomerId(list[0].id);
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to load customers";
+      setActionStatus(`Load customers ✕ (${message})`);
+    } finally {
+      setLoadingCustomers(false);
+    }
+  };
+
+  React.useEffect(() => {
+    loadCustomers();
+  }, []);
 
   const progressMetrics = [
     { progress: 100, title: "Account Setup", description: "Completed", color: "#10B981" },
@@ -106,7 +133,7 @@ export default function EnhancedDashboard() {
             <EnhancedButton
               magnetic
               disabled={isBusy}
-              onClick={() => callApi("Fetch customers", { url: "/api/customers", method: "GET" })}
+              onClick={() => router.push("/customers")}
             >
               <Plus className="h-4 w-4" />
               Add Customer
@@ -129,9 +156,21 @@ export default function EnhancedDashboard() {
             </div>
 
             <div className="p-6 pt-4">
-              <StaggeredList items={customers} animationDelay={0.1}>
-                {(customer) => (
-                  <div className="group cursor-pointer rounded-xl border border-slate-700/50 bg-slate-900/40 p-4 transition-all duration-300 hover:border-purple-500/50 hover:bg-slate-900/70">
+              {loadingCustomers && customers.length === 0 ? (
+                <div className="text-sm text-slate-400">Loading customers…</div>
+              ) : customers.length === 0 ? (
+                <div className="text-sm text-slate-400">
+                  No customers yet. Add one to begin testing.
+                </div>
+              ) : (
+                <StaggeredList items={customers} animationDelay={0.1}>
+                  {(customer) => {
+                    const statusLabel = (customer.status ?? "PAUSED").toUpperCase();
+                    return (
+                      <div
+                        className="group cursor-pointer rounded-xl border border-slate-700/50 bg-slate-900/40 p-4 transition-all duration-300 hover:border-purple-500/50 hover:bg-slate-900/70"
+                        onClick={() => setSelectedCustomerId(customer.id)}
+                      >
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="text-sm font-semibold text-slate-100 group-hover:text-white">
@@ -143,19 +182,21 @@ export default function EnhancedDashboard() {
                       </div>
                       <div
                         className={`rounded-full px-3 py-1 text-xs font-medium ${
-                          customer.status === "active"
+                          statusLabel === "ACTIVE"
                             ? "bg-emerald-500/20 text-emerald-300"
-                            : customer.status === "pending"
+                            : statusLabel === "PAUSED"
                               ? "bg-amber-500/20 text-amber-300"
                               : "bg-slate-500/20 text-slate-300"
                         }`}
                       >
-                        {customer.status.toUpperCase()}
+                        {statusLabel}
                       </div>
                     </div>
-                  </div>
-                )}
-              </StaggeredList>
+                      </div>
+                    );
+                  }}
+                </StaggeredList>
+              )}
             </div>
           </div>
 
@@ -164,20 +205,28 @@ export default function EnhancedDashboard() {
               <div className="space-y-4 p-6 pb-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-bold text-slate-100">Customer Detail</h3>
-                  <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 px-3 py-1.5 text-xs font-medium text-emerald-300">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    ACTIVE
-                  </div>
+                  {selectedCustomer && (
+                    <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 px-3 py-1.5 text-xs font-medium text-emerald-300">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      {selectedCustomer.status ?? "PAUSED"}
+                    </div>
+                  )}
                 </div>
 
-                <div className="animate-pulse rounded-xl border border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="h-4 w-4 text-emerald-400" />
-                    <span className="text-sm font-medium text-emerald-300">
-                      Ready to activate
-                    </span>
+                {selectedCustomer ? (
+                  <div className="rounded-xl border border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="h-4 w-4 text-emerald-400" />
+                      <span className="text-sm font-medium text-emerald-300">
+                        Customer selected
+                      </span>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-3 text-sm text-slate-300">
+                    Select a customer to view details.
+                  </div>
+                )}
               </div>
 
               <div className="space-y-6 p-6 pt-4">
@@ -185,42 +234,54 @@ export default function EnhancedDashboard() {
                   <h4 className="mb-6 text-lg font-semibold text-slate-100">
                     Activation Progress
                   </h4>
-                  <ProgressRingGroup items={progressMetrics} columns={4} />
+                  {selectedCustomer ? (
+                    <ProgressRingGroup items={progressMetrics} columns={4} />
+                  ) : (
+                    <div className="text-sm text-slate-400">No metrics available.</div>
+                  )}
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
-                  <StaggeredGrid
-                    items={[
-                      { label: "Business name", value: "Acme Heating Co." },
-                      { label: "Contact email", value: "ops@acmeheating.com" },
-                      { label: "Business phone", value: "+1 (555) 010-8899" },
-                      { label: "Plan", value: "Pro", highlight: true }
-                    ]}
-                    columns={2}
-                    animationDelay={0.05}
-                  >
-                    {(item) => (
-                      <div className="rounded-lg border border-slate-700/50 bg-slate-900/40 p-4 transition-colors duration-300 hover:border-cyan-500/30">
-                        <div className="mb-2 text-xs uppercase tracking-wide text-slate-400">
-                          {item.label}
+                  {selectedCustomer ? (
+                    <StaggeredGrid
+                      items={[
+                        { label: "Business name", value: selectedCustomer.name },
+                        { label: "Contact email", value: selectedCustomer.email },
+                        { label: "Business phone", value: selectedCustomer.phone ?? "—" },
+                        {
+                          label: "Plan",
+                          value: selectedCustomer.plan ?? "—",
+                          highlight: Boolean(selectedCustomer.plan)
+                        }
+                      ]}
+                      columns={2}
+                      animationDelay={0.05}
+                    >
+                      {(item) => (
+                        <div className="rounded-lg border border-slate-700/50 bg-slate-900/40 p-4 transition-colors duration-300 hover:border-cyan-500/30">
+                          <div className="mb-2 text-xs uppercase tracking-wide text-slate-400">
+                            {item.label}
+                          </div>
+                          <div
+                            className={`text-sm font-medium ${
+                              item.highlight ? "text-cyan-400" : "text-slate-100"
+                            }`}
+                          >
+                            {item.value}
+                          </div>
                         </div>
-                        <div
-                          className={`text-sm font-medium ${
-                            item.highlight ? "text-cyan-400" : "text-slate-100"
-                          }`}
-                        >
-                          {item.value}
-                        </div>
-                      </div>
-                    )}
-                  </StaggeredGrid>
+                      )}
+                    </StaggeredGrid>
+                  ) : (
+                    <div className="text-sm text-slate-400">Select a customer to view details.</div>
+                  )}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 pt-4">
                   <EnhancedButton
                     variant="primary"
                     magnetic
-                    disabled={isBusy}
+                    disabled={isBusy || !customerId}
                     onClick={() =>
                       callApi("Activate customer", {
                         url: "/api/customers/activate",
@@ -235,7 +296,7 @@ export default function EnhancedDashboard() {
                   <EnhancedButton
                     variant="secondary"
                     magnetic
-                    disabled={isBusy}
+                    disabled={isBusy || !customerId}
                     onClick={() =>
                       callApi("Deactivate customer", {
                         url: "/api/customers/deactivate",
@@ -249,7 +310,7 @@ export default function EnhancedDashboard() {
 
                   <EnhancedButton
                     variant="ghost"
-                    disabled={isBusy}
+                    disabled={isBusy || !customerId}
                     onClick={() =>
                       callApi("Issue summary", {
                         url: "/api/events",
@@ -316,7 +377,7 @@ export default function EnhancedDashboard() {
             variant="ghost"
             magnetic
             disabled={isBusy}
-            onClick={() => callApi("Load customers", { url: "/api/customers", method: "GET" })}
+            onClick={loadCustomers}
           >
             <Users className="h-4 w-4" />
             View All Customers
@@ -326,7 +387,7 @@ export default function EnhancedDashboard() {
           <EnhancedButton
             variant="ghost"
             magnetic
-            disabled={isBusy}
+            disabled={isBusy || !customerId}
             onClick={() =>
               callApi("Send SMS", {
                 url: "/api/sms/execute",
@@ -347,7 +408,7 @@ export default function EnhancedDashboard() {
           <EnhancedButton
             variant="ghost"
             magnetic
-            disabled={isBusy}
+            disabled={isBusy || !customerId}
             onClick={() =>
               callApi("Place voice call", {
                 url: "/api/voice/execute",

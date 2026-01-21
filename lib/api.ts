@@ -1,7 +1,7 @@
 export type CustomerStatus = "ACTIVE" | "PAUSED" | "TERMINATED";
 
 export interface Customer {
-  id: number;
+  id: string;
   name: string;
   email: string;
   phone?: string;
@@ -45,7 +45,7 @@ async function listCustomers(
   return response.json() as Promise<CustomerListResponse>;
 }
 
-async function getCustomer(id: number): Promise<Customer> {
+async function getCustomer(id: string): Promise<Customer> {
   const response = await fetch(`/api/customers/${id}`);
   if (!response.ok) {
     throw new Error("Failed to load customer.");

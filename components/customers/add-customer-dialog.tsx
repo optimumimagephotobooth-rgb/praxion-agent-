@@ -21,7 +21,7 @@ export interface AddCustomerPayload {
 interface AddCustomerDialogProps {
   open: boolean;
   onClose: () => void;
-  onCreate: (payload: AddCustomerPayload) => void;
+  onCreate: (payload: AddCustomerPayload) => void | Promise<void>;
 }
 
 export function AddCustomerDialog({
@@ -90,13 +90,15 @@ export function AddCustomerDialog({
     if (!validate()) return;
     setSubmitting(true);
     try {
-      onCreate({
+      await Promise.resolve(
+        onCreate({
         name: name.trim(),
         email: email.trim(),
         phone: phone.trim(),
         plan: plan as PlanOption,
         notes: notes.trim() || undefined
-      });
+        })
+      );
       showToast("Customer created. Status: Not ready for activation.", "success");
       setName("");
       setEmail("");

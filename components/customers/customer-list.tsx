@@ -13,7 +13,7 @@ import { N8nStatusIndicator } from "@/components/n8n";
 import { RippleButton } from "@/components/effects";
 
 interface CustomerListProps {
-  onNavigate: (view: string, id?: number) => void;
+  onNavigate: (view: string, id?: string) => void;
 }
 
 export function CustomerList({ onNavigate }: CustomerListProps) {
@@ -95,16 +95,23 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
       <AddCustomerDialog
         open={showAddDialog}
         onClose={() => setShowAddDialog(false)}
-        onCreate={(payload) => {
-          const newCustomer: Customer = {
-            id: Date.now(),
-            name: payload.name,
-            email: payload.email,
-            phone: payload.phone,
-            status: "PAUSED",
-            plan: payload.plan
-          };
-          setCustomers((prev) => [newCustomer, ...prev]);
+        onCreate={async (payload) => {
+          const response = await fetch("/api/customers", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: payload.email,
+              fullName: payload.name,
+              phone: payload.phone,
+              plan: payload.plan,
+              notes: payload.notes
+            })
+          });
+          if (!response.ok) {
+            throw new Error("Failed to create customer.");
+          }
+          setShowAddDialog(false);
+          await fetchCustomers();
         }}
       />
 

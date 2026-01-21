@@ -8,19 +8,10 @@ export default async function CustomerDetailPage({
   params
 }: CustomerDetailPageProps) {
   const { id } = await params;
-  const customerId = Number(id);
-
-  if (Number.isNaN(customerId)) {
-    return (
-      <main className="mx-auto w-full max-w-[1392px] px-6 py-8">
-        <div className="text-sm text-slate-400">Invalid customer ID.</div>
-      </main>
-    );
-  }
 
   return (
     <main className="mx-auto w-full max-w-[1392px] px-6 py-8">
-      <CustomerDetailClient id={customerId} />
+      <CustomerDetailClient id={id} />
     </main>
   );
 }

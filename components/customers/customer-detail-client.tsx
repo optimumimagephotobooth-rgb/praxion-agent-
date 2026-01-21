@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { CustomerDetail } from "@/components/customers/customer-detail";
 
 interface CustomerDetailClientProps {
-  id: number;
+  id: string;
 }
 
 export function CustomerDetailClient({ id }: CustomerDetailClientProps) {

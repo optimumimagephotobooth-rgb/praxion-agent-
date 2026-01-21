@@ -18,7 +18,7 @@ const normalizeBoolean = (value: unknown, fallback: boolean) => {
   return fallback;
 };
 
-export async function getCustomerAccessState(customerId: number): Promise<CustomerAccessState> {
+export async function getCustomerAccessState(customerId: string): Promise<CustomerAccessState> {
   const supabase = getSupabaseAdminClient();
   if (supabase) {
     const { data, error } = await supabase
@@ -45,7 +45,8 @@ export async function getCustomerAccessState(customerId: number): Promise<Custom
     }
   }
 
-  const fallback = getMockCustomer(customerId);
+  const numericId = Number(customerId);
+  const fallback = getMockCustomer(Number.isNaN(numericId) ? 0 : numericId);
   return {
     status: fallback.status,
     smsAllowed: fallback.smsAllowed,
