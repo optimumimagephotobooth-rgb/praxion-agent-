@@ -3,6 +3,7 @@ export type DomainEventPayload = Record<string, unknown>;
 export type DomainEventType =
   | "CUSTOMER_ACTIVATED"
   | "CUSTOMER_DEACTIVATED"
+  | "CUSTOMER_CREATED"
   | "PAYMENT_FAILED"
   | "PAYMENT_SUCCEEDED";
 

@@ -27,6 +27,14 @@ export default function EnhancedDashboard() {
   const [customers, setCustomers] = React.useState<Customer[]>([]);
   const [loadingCustomers, setLoadingCustomers] = React.useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = React.useState<string | null>(null);
+  const [integrationsStatus, setIntegrationsStatus] = React.useState<
+    | {
+        supabase: { configured: boolean; ok: boolean; error: string | null };
+        n8n: { configured: boolean };
+      }
+    | null
+  >(null);
+  const [integrationsError, setIntegrationsError] = React.useState<string | null>(null);
 
   const callApi = async (
     label: string,
@@ -82,6 +90,23 @@ export default function EnhancedDashboard() {
 
   React.useEffect(() => {
     loadCustomers();
+  }, []);
+
+  React.useEffect(() => {
+    const loadIntegrations = async () => {
+      try {
+        const response = await fetch("/api/health");
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error("Failed to load integration status");
+        }
+        setIntegrationsStatus(data);
+        setIntegrationsError(null);
+      } catch {
+        setIntegrationsError("Unable to verify integrations.");
+      }
+    };
+    loadIntegrations();
   }, []);
 
   const progressMetrics = [
@@ -144,6 +169,38 @@ export default function EnhancedDashboard() {
         {actionStatus && (
           <div className="mb-4 rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm text-slate-300">
             {actionStatus}
+          </div>
+        )}
+        {integrationsError && (
+          <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-200">
+            {integrationsError}
+          </div>
+        )}
+        {integrationsStatus && (
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <div
+              className={`rounded-full px-3 py-1 text-xs font-medium ${
+                integrationsStatus.supabase.configured && integrationsStatus.supabase.ok
+                  ? "bg-emerald-500/20 text-emerald-200"
+                  : "bg-amber-500/20 text-amber-200"
+              }`}
+            >
+              Supabase:{" "}
+              {integrationsStatus.supabase.configured
+                ? integrationsStatus.supabase.ok
+                  ? "Connected"
+                  : "Error"
+                : "Not configured"}
+            </div>
+            <div
+              className={`rounded-full px-3 py-1 text-xs font-medium ${
+                integrationsStatus.n8n.configured
+                  ? "bg-emerald-500/20 text-emerald-200"
+                  : "bg-amber-500/20 text-amber-200"
+              }`}
+            >
+              n8n: {integrationsStatus.n8n.configured ? "Configured" : "Not configured"}
+            </div>
           </div>
         )}
 
