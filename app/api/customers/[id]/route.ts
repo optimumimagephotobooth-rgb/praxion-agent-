@@ -1,10 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabase-server";
 
 export async function GET(
-  _req: NextRequest,
-  { params }: { params: { id: string } }
+  _req: Request,
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params;
   const supabase = getSupabaseAdminClient();
   if (!supabase) {
     return NextResponse.json({ error: "SUPABASE_NOT_CONFIGURED" }, { status: 400 });
@@ -13,7 +14,7 @@ export async function GET(
   const { data, error } = await supabase
     .from("customers")
     .select("*")
-    .eq("id", params.id)
+    .eq("id", id)
     .single();
 
   if (error || !data) {
