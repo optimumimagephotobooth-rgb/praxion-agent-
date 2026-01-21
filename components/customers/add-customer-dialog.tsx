@@ -107,8 +107,10 @@ export function AddCustomerDialog({
       setNotes("");
       setErrors({});
       onClose();
-    } catch {
-      showToast("Could not create customer. Please try again.", "error");
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "Could not create customer.";
+      showToast(message, "error");
     } finally {
       setSubmitting(false);
     }

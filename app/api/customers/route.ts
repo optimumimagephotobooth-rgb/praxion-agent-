@@ -117,7 +117,14 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (error || !data) {
-    return NextResponse.json({ error: "CUSTOMER_CREATE_FAILED" }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "CUSTOMER_CREATE_FAILED",
+        details: error?.message ?? "Insert failed",
+        code: error?.code ?? null
+      },
+      { status: 500 }
+    );
   }
 
   emitEvent({

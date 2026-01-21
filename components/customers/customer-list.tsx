@@ -107,8 +107,13 @@ export function CustomerList({ onNavigate }: CustomerListProps) {
               notes: payload.notes
             })
           });
+          const responseBody = await response.json().catch(() => null);
           if (!response.ok) {
-            throw new Error("Failed to create customer.");
+            throw new Error(
+              responseBody?.details ||
+                responseBody?.error ||
+                "Failed to create customer."
+            );
           }
           setShowAddDialog(false);
           await fetchCustomers();
