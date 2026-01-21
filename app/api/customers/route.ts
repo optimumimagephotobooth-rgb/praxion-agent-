@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSupabaseAdminClient } from "@/lib/supabase-server";
 
 /**
  * GET /api/customers
@@ -16,6 +17,35 @@ export async function GET(req: NextRequest) {
   const page = Number(searchParams.get("page") ?? 1);
   const limit = Number(searchParams.get("limit") ?? 10);
   const search = searchParams.get("search") ?? "";
+
+  const supabase = getSupabaseAdminClient();
+  if (supabase) {
+    const start = (page - 1) * limit;
+    const end = start + limit - 1;
+    const query = supabase
+      .from("customers")
+      .select("*", { count: "exact" })
+      .order("id", { ascending: true })
+      .range(start, end);
+
+    const filteredQuery = search
+      ? query.or(`name.ilike.%${search}%,email.ilike.%${search}%`)
+      : query;
+
+    const { data, count, error } = await filteredQuery;
+    if (error) {
+      return NextResponse.json({ error: "SUPABASE_QUERY_FAILED" }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      data: data ?? [],
+      meta: {
+        page,
+        limit,
+        total: count ?? 0
+      }
+    });
+  }
 
   const allCustomers = [
     {

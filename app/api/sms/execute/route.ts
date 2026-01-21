@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import twilio, { type Twilio } from "twilio";
 import { isOptedOut } from "@/lib/sms-optout-store";
-import { getCustomer } from "@/lib/mock-customer-store";
+import { getCustomerAccessState } from "@/lib/customer-lookup";
 
 const client: Twilio = twilio(
   process.env.TWILIO_ACCOUNT_SID ?? "",
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ sent: false, reason: "INVALID_CUSTOMER" }, { status: 400 });
   }
 
-  const customer = getCustomer(customerId);
+  const customer = await getCustomerAccessState(customerId);
   if (customer.status !== "ACTIVE") {
     console.log("SMS BLOCKED (CUSTOMER INACTIVE):", customerId);
     return NextResponse.json({ sent: false, reason: "CUSTOMER_INACTIVE" });
