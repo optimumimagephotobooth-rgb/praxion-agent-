@@ -481,7 +481,7 @@ export default function EnhancedDashboard() {
             variant="ghost"
             magnetic
             disabled={isBusy}
-            onClick={loadCustomers}
+            onClick={() => router.push("/customers")}
           >
             <Users className="h-4 w-4" />
             View All Customers
@@ -505,7 +505,7 @@ export default function EnhancedDashboard() {
             }
           >
             <CreditCard className="h-4 w-4" />
-            Billing Overview
+            Send SMS
             <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </EnhancedButton>
 
@@ -525,7 +525,7 @@ export default function EnhancedDashboard() {
             }
           >
             <Upload className="h-4 w-4" />
-            Export Data
+            Place Voice Call
             <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </EnhancedButton>
         </div>

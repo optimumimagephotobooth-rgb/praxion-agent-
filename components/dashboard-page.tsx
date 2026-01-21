@@ -45,16 +45,27 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
         headers: input.body ? { "Content-Type": "application/json" } : undefined,
         body: input.body ? JSON.stringify(input.body) : undefined
       });
-      const data = await res.json().catch(() => null);
+      const rawText = await res.text().catch(() => "");
+      const data = rawText ? (JSON.parse(rawText) as Record<string, unknown>) : null;
       if (!res.ok) {
-        throw new Error(data?.error ?? data?.reason ?? "Request failed");
+        const dataError =
+          data && typeof data === "object" && "error" in data && typeof data.error === "string"
+            ? data.error
+            : null;
+        const dataReason =
+          data && typeof data === "object" && "reason" in data && typeof data.reason === "string"
+            ? data.reason
+            : null;
+        const errorMessage =
+          dataError ?? dataReason ?? (rawText ? rawText.slice(0, 180) : null) ?? "";
+        throw new Error(errorMessage || `Request failed (${res.status})`);
       }
       setActionStatus(`${label} ✓`);
       return data;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Request failed";
       setActionStatus(`${label} ✕ (${message})`);
-      throw err;
+      return null;
     } finally {
       setIsBusy(false);
     }
@@ -158,7 +169,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
               className="px-4 py-2"
               disabled={isBusy || !customerId}
               onClick={() =>
-                callApi("View analytics", {
+                void callApi("View analytics", {
                   url: "/api/events",
                   body: {
                     type: "ANALYTICS_VIEWED",
@@ -174,7 +185,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
               variant="outline"
               disabled={isBusy || !customerId}
               onClick={() =>
-                callApi("Send billing SMS", {
+                void callApi("Send billing SMS", {
                   url: "/api/sms/execute",
                   body: {
                     customerId: String(customerId),
@@ -192,7 +203,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
               className="px-4 py-2"
               disabled={isBusy || !customerId}
               onClick={() =>
-                callApi("Run report", {
+                void callApi("Run report", {
                   url: "/api/events",
                   body: {
                     type: "REPORTS_REQUESTED",
