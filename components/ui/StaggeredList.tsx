@@ -6,10 +6,9 @@ import { cn } from "@/lib/utils";
 type StaggeredItem = {
   id?: string | number;
   content?: React.ReactNode;
-  [key: string]: unknown;
 };
 
-export function StaggeredList<T extends StaggeredItem>({
+export function StaggeredList<T>({
   items,
   animationDelay = 0.1,
   className,
@@ -51,18 +50,20 @@ export function StaggeredList<T extends StaggeredItem>({
     <div ref={containerRef} className={cn("space-y-4", className)}>
       {items.map((item, index) => (
         <div
-          key={item.id ?? index}
+          key={(item as StaggeredItem).id ?? index}
           className="stagger-item opacity-0 translate-y-6 transition-all duration-700 ease-out"
           style={{ animationDelay: `${index * animationDelay}s`, willChange: "transform, opacity" }}
         >
-          {children ? children(item) : item.content}
+          {children
+            ? children(item)
+            : (item as StaggeredItem).content ?? null}
         </div>
       ))}
     </div>
   );
 }
 
-export function StaggeredGrid<T extends StaggeredItem>({
+export function StaggeredGrid<T>({
   items,
   columns = 3,
   animationDelay = 0.1,
@@ -112,11 +113,13 @@ export function StaggeredGrid<T extends StaggeredItem>({
     <div ref={gridRef} className={cn("grid gap-4", gridColumns[columns], className)}>
       {items.map((item, index) => (
         <div
-          key={item.id ?? index}
+          key={(item as StaggeredItem).id ?? index}
           className="stagger-item opacity-0 translate-y-6 transition-all duration-700 ease-out"
           style={{ animationDelay: `${index * animationDelay}s`, willChange: "transform, opacity" }}
         >
-          {children ? children(item) : item.content}
+          {children
+            ? children(item)
+            : (item as StaggeredItem).content ?? null}
         </div>
       ))}
     </div>
