@@ -12,6 +12,7 @@ import {
   ChevronRight,
   CreditCard,
   Plus,
+  RefreshCw,
   Settings,
   Shield,
   Upload,
@@ -35,6 +36,7 @@ export default function EnhancedDashboard() {
     | null
   >(null);
   const [integrationsError, setIntegrationsError] = React.useState<string | null>(null);
+  const [integrationsLoading, setIntegrationsLoading] = React.useState(false);
 
   const callApi = async (
     label: string,
@@ -48,16 +50,21 @@ export default function EnhancedDashboard() {
         headers: input.body ? { "Content-Type": "application/json" } : undefined,
         body: input.body ? JSON.stringify(input.body) : undefined
       });
-      const data = await res.json().catch(() => null);
+      const rawText = await res.text().catch(() => "");
+      const data = rawText ? (JSON.parse(rawText) as Record<string, unknown>) : null;
       if (!res.ok) {
-        throw new Error(data?.error ?? data?.reason ?? "Request failed");
+        const errorMessage =
+          (data && (data.error ?? data.reason)) ||
+          (rawText ? rawText.slice(0, 180) : null) ||
+          `Request failed (${res.status})`;
+        throw new Error(errorMessage);
       }
       setActionStatus(`${label} ✓`);
       return data;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Request failed";
       setActionStatus(`${label} ✕ (${message})`);
-      throw err;
+      return null;
     } finally {
       setIsBusy(false);
     }
@@ -92,22 +99,26 @@ export default function EnhancedDashboard() {
     loadCustomers();
   }, []);
 
-  React.useEffect(() => {
-    const loadIntegrations = async () => {
-      try {
-        const response = await fetch("/api/health");
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error("Failed to load integration status");
-        }
-        setIntegrationsStatus(data);
-        setIntegrationsError(null);
-      } catch {
-        setIntegrationsError("Unable to verify integrations.");
+  const loadIntegrations = React.useCallback(async () => {
+    setIntegrationsLoading(true);
+    setIntegrationsError(null);
+    try {
+      const response = await fetch("/api/health");
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to load integration status");
       }
-    };
-    loadIntegrations();
+      setIntegrationsStatus(data);
+    } catch {
+      setIntegrationsError("Unable to verify integrations.");
+    } finally {
+      setIntegrationsLoading(false);
+    }
   }, []);
+
+  React.useEffect(() => {
+    loadIntegrations();
+  }, [loadIntegrations]);
 
   const progressMetrics = [
     { progress: 100, title: "Account Setup", description: "Completed", color: "#10B981" },
@@ -141,7 +152,7 @@ export default function EnhancedDashboard() {
               variant="ghost"
               disabled={isBusy}
               onClick={() =>
-                callApi("Open settings", {
+                void callApi("Open settings", {
                   url: "/api/events",
                   body: {
                     type: "OPEN_SETTINGS",
@@ -176,31 +187,45 @@ export default function EnhancedDashboard() {
             {integrationsError}
           </div>
         )}
-        {integrationsStatus && (
+        {(integrationsStatus || integrationsError) && (
           <div className="mb-4 flex flex-wrap items-center gap-3">
-            <div
-              className={`rounded-full px-3 py-1 text-xs font-medium ${
-                integrationsStatus.supabase.configured && integrationsStatus.supabase.ok
-                  ? "bg-emerald-500/20 text-emerald-200"
-                  : "bg-amber-500/20 text-amber-200"
-              }`}
+            {integrationsStatus && (
+              <>
+                <div
+                  className={`rounded-full px-3 py-1 text-xs font-medium ${
+                    integrationsStatus.supabase.configured && integrationsStatus.supabase.ok
+                      ? "bg-emerald-500/20 text-emerald-200"
+                      : "bg-amber-500/20 text-amber-200"
+                  }`}
+                >
+                  Supabase:{" "}
+                  {integrationsStatus.supabase.configured
+                    ? integrationsStatus.supabase.ok
+                      ? "Connected"
+                      : "Error"
+                    : "Not configured"}
+                </div>
+                <div
+                  className={`rounded-full px-3 py-1 text-xs font-medium ${
+                    integrationsStatus.n8n.configured
+                      ? "bg-emerald-500/20 text-emerald-200"
+                      : "bg-amber-500/20 text-amber-200"
+                  }`}
+                >
+                  n8n: {integrationsStatus.n8n.configured ? "Configured" : "Not configured"}
+                </div>
+              </>
+            )}
+            <EnhancedButton
+              variant="ghost"
+              magnetic={false}
+              disabled={integrationsLoading}
+              onClick={loadIntegrations}
+              className="px-3 py-1.5 text-xs"
             >
-              Supabase:{" "}
-              {integrationsStatus.supabase.configured
-                ? integrationsStatus.supabase.ok
-                  ? "Connected"
-                  : "Error"
-                : "Not configured"}
-            </div>
-            <div
-              className={`rounded-full px-3 py-1 text-xs font-medium ${
-                integrationsStatus.n8n.configured
-                  ? "bg-emerald-500/20 text-emerald-200"
-                  : "bg-amber-500/20 text-amber-200"
-              }`}
-            >
-              n8n: {integrationsStatus.n8n.configured ? "Configured" : "Not configured"}
-            </div>
+              <RefreshCw className={`h-3.5 w-3.5 ${integrationsLoading ? "animate-spin" : ""}`} />
+              {integrationsLoading ? "Checking..." : "Re-check integrations"}
+            </EnhancedButton>
           </div>
         )}
 
@@ -340,7 +365,7 @@ export default function EnhancedDashboard() {
                     magnetic
                     disabled={isBusy || !customerId}
                     onClick={() =>
-                      callApi("Activate customer", {
+                      void callApi("Activate customer", {
                         url: "/api/customers/activate",
                         body: { customerId }
                       })
@@ -355,7 +380,7 @@ export default function EnhancedDashboard() {
                     magnetic
                     disabled={isBusy || !customerId}
                     onClick={() =>
-                      callApi("Deactivate customer", {
+                      void callApi("Deactivate customer", {
                         url: "/api/customers/deactivate",
                         body: { customerId, reason: "Manual action" }
                       })
@@ -369,7 +394,7 @@ export default function EnhancedDashboard() {
                     variant="ghost"
                     disabled={isBusy || !customerId}
                     onClick={() =>
-                      callApi("Issue summary", {
+                      void callApi("Issue summary", {
                         url: "/api/events",
                         body: {
                           type: "ISSUE_SUMMARY_REQUESTED",
@@ -446,7 +471,7 @@ export default function EnhancedDashboard() {
             magnetic
             disabled={isBusy || !customerId}
             onClick={() =>
-              callApi("Send SMS", {
+              void callApi("Send SMS", {
                 url: "/api/sms/execute",
                 body: {
                   customerId: String(customerId),
@@ -467,7 +492,7 @@ export default function EnhancedDashboard() {
             magnetic
             disabled={isBusy || !customerId}
             onClick={() =>
-              callApi("Place voice call", {
+              void callApi("Place voice call", {
                 url: "/api/voice/execute",
                 body: {
                   customerId: String(customerId),
