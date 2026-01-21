@@ -66,11 +66,6 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
     );
   }
 
-  const isReadyForActivation =
-    Boolean(customer.phone) &&
-    Boolean(customer.address) &&
-    Boolean(customer.plan);
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -103,11 +98,6 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
             >
               {customer.status}
             </Badge>
-            <span className="text-sm font-medium text-slate-400">
-              {isReadyForActivation
-                ? "Ready for activation"
-                : "Missing required setup"}
-            </span>
           </div>
 
           <div className="text-sm text-slate-400">
@@ -138,34 +128,6 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
                   <InfoRow label="Notes" value={customer.notes} />
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-slate-100">
-            Activation Readiness
-          </h3>
-          <Card className="glass-card h-full">
-            <CardContent className="space-y-4 p-6">
-              <div className="space-y-3">
-                <ChecklistItem
-                  label="Business phone"
-                  ok={Boolean(customer.phone)}
-                />
-                <ChecklistItem
-                  label="Address details"
-                  ok={Boolean(customer.address)}
-                />
-                <ChecklistItem
-                  label="Plan selected"
-                  ok={Boolean(customer.plan)}
-                />
-                <ChecklistItem
-                  label="Tax ID provided"
-                  ok={Boolean(customer.taxId)}
-                />
-              </div>
             </CardContent>
           </Card>
         </div>

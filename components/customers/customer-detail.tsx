@@ -106,7 +106,7 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
         throw new Error("Deactivation failed");
       }
       showToast("Customer deactivated", "success");
-      setCustomer((prev) => (prev ? { ...prev, status: "TERMINATED" } : prev));
+      await fetchCustomer();
     } catch {
       showToast("Could not deactivate customer", "error");
     } finally {
@@ -127,7 +127,7 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
         throw new Error("Activation failed");
       }
       showToast("Customer activated", "success");
-      setCustomer((prev) => (prev ? { ...prev, status: "ACTIVE" } : prev));
+      await fetchCustomer();
     } catch {
       showToast("Could not activate customer", "error");
     } finally {
@@ -246,24 +246,16 @@ export function CustomerDetail({ onNavigate, id }: CustomerDetailProps) {
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap items-center gap-3">
-          <div
-            title={
-              isReadyForActivation
-                ? "Activate customer"
-                : "Complete required fields before activation"
-            }
+          <Button
+            onClick={handleActivate}
+            disabled={activating || customer.status === "ACTIVE"}
           >
-            <Button
-              onClick={handleActivate}
-              disabled={!isReadyForActivation || activating}
-            >
-              {activating ? "Activating…" : "Activate Customer"}
-            </Button>
-          </div>
+            {activating ? "Activating…" : "Activate Customer"}
+          </Button>
           <Button
             variant="outline"
             onClick={handleDeactivate}
-            disabled={deactivating}
+            disabled={deactivating || customer.status !== "ACTIVE"}
           >
             {deactivating ? "Deactivating…" : "Deactivate"}
           </Button>
