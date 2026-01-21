@@ -70,6 +70,7 @@ export function RippleButton({
   children,
   className,
   onClick,
+  type,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const [ripples, setRipples] = React.useState<Array<{ x: number; y: number; id: number }>>([]);
@@ -94,13 +95,14 @@ export function RippleButton({
         "relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600 px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:scale-105 active:scale-95",
         className
       )}
+      type={type ?? "button"}
       onClick={handleClick}
       {...props}
     >
       {ripples.map((ripple) => (
         <span
           key={ripple.id}
-          className="absolute rounded-full bg-white/30"
+          className="pointer-events-none absolute rounded-full bg-white/30"
           style={{
             left: ripple.x,
             top: ripple.y,
@@ -123,6 +125,7 @@ export function MagneticButton({
   glowOnHover = true,
   variant = "primary",
   className,
+  type,
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
   strength?: number;
@@ -205,13 +208,14 @@ export function MagneticButton({
         variantClasses[variant],
         className
       )}
+      type={type ?? "button"}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
       {...props}
     >
-      <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
-      <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-purple-600/20 to-cyan-600/20 opacity-0 blur transition-opacity duration-500 group-hover:opacity-70" />
+      <div className="pointer-events-none absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
+      <div className="pointer-events-none absolute -inset-0.5 rounded-xl bg-gradient-to-r from-purple-600/20 to-cyan-600/20 opacity-0 blur transition-opacity duration-500 group-hover:opacity-70" />
       <span className="relative z-10 flex items-center gap-3">{children}</span>
     </button>
   );

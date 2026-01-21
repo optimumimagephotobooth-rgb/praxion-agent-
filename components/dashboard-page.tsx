@@ -20,6 +20,10 @@ interface DashboardPageProps {
 
 export function DashboardPage({ onNavigate }: DashboardPageProps) {
   const router = useRouter();
+  const [actionStatus, setActionStatus] = React.useState<string | null>(null);
+  const [isBusy, setIsBusy] = React.useState(false);
+  const customerId = 1;
+  const testPhone = "+15550108899";
 
   const handlePrimaryAction = () => {
     if (onNavigate) {
@@ -27,6 +31,33 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
       return;
     }
     router.push("/customers");
+  };
+
+  const callApi = async (
+    label: string,
+    input: { url: string; method?: "GET" | "POST"; body?: Record<string, unknown> }
+  ) => {
+    setIsBusy(true);
+    setActionStatus(`${label}...`);
+    try {
+      const res = await fetch(input.url, {
+        method: input.method ?? "POST",
+        headers: input.body ? { "Content-Type": "application/json" } : undefined,
+        body: input.body ? JSON.stringify(input.body) : undefined
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(data?.error ?? data?.reason ?? "Request failed");
+      }
+      setActionStatus(`${label} ✓`);
+      return data;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Request failed";
+      setActionStatus(`${label} ✕ (${message})`);
+      throw err;
+    } finally {
+      setIsBusy(false);
+    }
   };
 
   return (
@@ -49,6 +80,12 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
           </p>
         </CardContent>
       </Card>
+
+      {actionStatus && (
+        <div className="rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm text-slate-300">
+          {actionStatus}
+        </div>
+      )}
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
@@ -94,13 +131,55 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
               <Plus className="h-4 w-4" />
               Manage Customers
             </RippleButton>
-            <MagneticButton variant="secondary" className="px-4 py-2">
+            <MagneticButton
+              variant="secondary"
+              className="px-4 py-2"
+              disabled={isBusy}
+              onClick={() =>
+                callApi("View analytics", {
+                  url: "/api/events",
+                  body: {
+                    type: "ANALYTICS_VIEWED",
+                    customerId,
+                    timestamp: new Date().toISOString()
+                  }
+                })
+              }
+            >
               View Analytics
             </MagneticButton>
-            <Button variant="outline">
+            <Button
+              variant="outline"
+              disabled={isBusy}
+              onClick={() =>
+                callApi("Send billing SMS", {
+                  url: "/api/sms/execute",
+                  body: {
+                    customerId: String(customerId),
+                    to: testPhone,
+                    template: "BOOKING_LINK",
+                    context: { bookingUrl: "https://example.com/billing" }
+                  }
+                })
+              }
+            >
               Billing
             </Button>
-            <MagneticButton variant="ghost" className="px-4 py-2">
+            <MagneticButton
+              variant="ghost"
+              className="px-4 py-2"
+              disabled={isBusy}
+              onClick={() =>
+                callApi("Run report", {
+                  url: "/api/events",
+                  body: {
+                    type: "REPORTS_REQUESTED",
+                    customerId,
+                    timestamp: new Date().toISOString()
+                  }
+                })
+              }
+            >
               Reports
             </MagneticButton>
           </div>

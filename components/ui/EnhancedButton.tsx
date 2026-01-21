@@ -17,6 +17,7 @@ export function EnhancedButton({
   magnetic = true,
   onMouseMove,
   onMouseLeave,
+  type,
   ...props
 }: EnhancedButtonProps) {
   const buttonRef = React.useRef<HTMLButtonElement | null>(null);
@@ -66,11 +67,12 @@ export function EnhancedButton({
         variantClasses[variant],
         className
       )}
+      type={type ?? "button"}
       onMouseMove={magnetic ? handleMouseMove : onMouseMove}
       onMouseLeave={magnetic ? handleMouseLeave : onMouseLeave}
       {...props}
     >
-      <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
+      <div className="pointer-events-none absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-[100%]" />
       <span className="relative z-10 flex items-center gap-2">{children}</span>
     </button>
   );
