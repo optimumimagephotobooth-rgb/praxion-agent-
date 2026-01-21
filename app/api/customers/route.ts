@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabase-server";
+import { emitEvent } from "@/lib/domain-events";
 
 /**
  * GET /api/customers
@@ -118,6 +119,16 @@ export async function POST(req: NextRequest) {
   if (error || !data) {
     return NextResponse.json({ error: "CUSTOMER_CREATE_FAILED" }, { status: 500 });
   }
+
+  emitEvent({
+    type: "CUSTOMER_CREATED",
+    customerId: data.id,
+    timestamp: new Date().toISOString(),
+    payload: {
+      email: data.email,
+      fullName: data.full_name ?? null
+    }
+  });
 
   return NextResponse.json({
     id: data.id,

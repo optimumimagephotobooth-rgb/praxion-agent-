@@ -177,6 +177,7 @@ export function AddCustomerDialog({
               <Input
                 placeholder="+44 7XXX XXXXXX"
                 value={phone}
+                className="bg-white text-slate-900 placeholder:text-slate-500"
                 onChange={(event) => {
                   setPhone(event.target.value);
                   if (errors.phone) {
